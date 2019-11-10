@@ -1,0 +1,302 @@
+<html ng-app='weatherDataApp'>
+<head> 
+    <title>Weather data</title>
+    <style>
+        td {
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+        }
+        table {
+            border: 1px solid black;
+            border-spacing: 0;
+        }
+    </style>
+</head>
+<body ng-controller="WeatherDataController">
+    
+    <select ng-model="cityName" ng-init="cityName = options[0]" ng-change="onCitySelectionChanged()">
+        <option value="Aarhus">Aarhus</option>
+        <option value="Copenhagen">Copenhagen</option>
+        <option value="Horsens">Horsens</option>
+    </select>
+    <input ng-model="fromDate" id="datetimepicker" type="datetime-local" />
+
+    <div id='latest_data_div'>
+        <h1>Latest weather data from each type:</h1>
+        <table id='latest_data_table'>
+            <thead>
+                <tr>
+                    <td>Type</td>
+                    <td>Value</td>
+                    <td>Unit</td>
+                    <td>Time</td>
+                    <td>Place</td>
+                </tr>
+                <tr ng-repeat="wd in model.latestDataOfEachType">
+                    <td>{{wd.type}}</td>
+                    <td>{{wd.value}}</td>
+                    <td>{{wd.unit}}</td>
+                    <td>{{wd.time}}</td>
+                    <td>{{wd.place}}</td>
+                </tr>
+            </thead>
+            <tbody id='latest_data_data'></tbody>
+        </table>
+    </div>    
+
+    <div id='min_temperature_div'>
+        <h1>Minimum temperature recorded within the last 5 days:</h1>
+            <table id='min_temperature_table'>
+                <thead>
+                    <tr>
+                        <td>Type</td>
+                        <td>Value</td>
+                        <td>Unit</td>
+                        <td>Time</td>
+                        <td>Place</td>
+                    </tr>
+                    <tr ng-repeat="wd in model.minimumTemperatureData">
+                        <td>{{wd.type}}</td>
+                        <td>{{wd.value}}</td>
+                        <td>{{wd.unit}}</td>
+                        <td>{{wd.time}}</td>
+                        <td>{{wd.place}}</td>
+                    </tr>
+                </thead>
+                <tbody id='min_temperature_data'></tbody>
+            </table>
+   </div>    
+
+   <div id='max_temperature_div'>
+            <h1>Maximum temperature recorded within the last 5 days:</h1>
+            <table id='max_temperature_table'>
+                <thead>
+                    <tr>
+                        <td>Type</td>
+                        <td>Value</td>
+                        <td>Unit</td>
+                        <td>Time</td>
+                        <td>Place</td>
+                    </tr>
+                    <tr ng-repeat="wd in model.maximumTemperatureData">
+                        <td>{{wd.type}}</td>
+                        <td>{{wd.value}}</td>
+                        <td>{{wd.unit}}</td>
+                        <td>{{wd.time}}</td>
+                        <td>{{wd.place}}</td>
+                    </tr>
+                </thead>
+                <tbody id='max_temperature_data'></tbody>
+            </table>
+    </div>    
+
+    <div id = 'base'>
+        <h1 id="totalPrecipitation">Total precipitation within the selected date interval: {{model.totalPrecipitation}}</h1>
+        <h1 id="averageWindSpeed">Average wind speed within the selected date interval: {{model.averageWindSpeed}}</h1>
+        <h1 id="averageCloudCoverage">Average cloud coverage within the selected date interval: {{model.averageCloudCoverage}}</h1>
+        <h1 id="dominantWindDirection">Dominant wind direction within the selected date interval: {{model.dominantWindDirection}}</h1>
+    </div>
+    
+    <!--<div id='hourly_predictions'>
+        <h1>Hourly temperature predictions within the selected date interval:</h1>
+        <table id='hourly_predictions_table'>
+            <thead>
+                <tr>
+                    <td>From</td>
+                    <td>To</td>
+                    <td>Details</td>
+                    <td>Type</td>
+                    <td>Unit</td>
+                    <td>Time</td>
+                    <td>Place</td>
+                </tr>
+                <tr ng-repeat="hp in model.hourlyPredictionData">
+                        <td>{{hp.from}}</td>
+                        <td>{{hp.to}}</td>
+                        <td>{{hp.unit}}</td>
+                        <td>{{hp.time}}</td>
+                        <td>{{hp.place}}</td>
+                </tr>
+            </thead>
+            <tbody id='hourly_predictions_data'></tbody>
+        </table>
+    </div>-->
+
+</body>
+
+<script type = 'module'>
+        import 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js'
+        import './components.js'
+</script>
+
+<!--
+
+    // 8. Predictions for next 24 hours
+    async function showPredictionsForNext24Hours(cityName) {
+        await fetch('http://localhost:8080/forecast/' + cityName)
+            .then(response => response.json())
+            .then(weatherPredictions => {
+                let table;
+
+                if (cityName == 'Aarhus')
+                {
+                    table = document.getElementById('aarhus_hourly_predictions_table')
+                } else if (cityName == 'Copenhagen') {
+                    table = document.getElementById('copenhagen_hourly_predictions_table')
+                } else if (cityName == 'Horsens') {
+                    table = document.getElementById('horsens_hourly_predictions_table')    
+                }
+
+                weatherPredictions.forEach(prediction => appendPredictionToTable(table, prediction))
+            })
+            .catch(console.error)
+    }
+
+    function appendPredictionToTable(table, weatherPrediction) {
+        let row = table.insertRow();
+
+        let fromCell = row.insertCell(0)
+        let toCell = row.insertCell(1);
+        let detailsCell = row.insertCell(2);
+        let typeCell = row.insertCell(3);
+        let unitCell = row.insertCell(4);
+        let timeCell = row.insertCell(5);
+        let placeCell = row.insertCell(6);
+
+        fromCell.innerHTML = weatherPrediction.from
+        toCell.innerHTML = weatherPrediction.to;
+
+        if (weatherPrediction['precipitation_types'] != null)
+        {
+            detailsCell.innerHTML = weatherPrediction.precipitation_types.join('\n');
+        } else if (weatherPrediction['directions'] != null) {
+            detailsCell.innerHTML = weatherPrediction.directions.join('\n');
+        } else {
+            detailsCell.innerHTML = ''
+        }
+        
+        typeCell.innerHTML = weatherPrediction.type; 
+        unitCell.innerHTML = weatherPrediction.unit;
+        timeCell.innerHTML = weatherPrediction.time;
+        placeCell.innerHTML = weatherPrediction.place;
+    }
+
+    function getHighestOccuringElement(weatherDataArray) {
+        if (weatherDataArray.length == 0) {
+            return null;
+        }
+
+        let occuranceMap = { };
+        let mostCommonElement = weatherDataArray[0], maxCount = 1;
+        for (let i = 0; i < weatherDataArray.length; i++)
+        {
+            let currentWeatherData = weatherDataArray[i];
+        
+            if (occuranceMap[currentWeatherData] == null) {
+                occuranceMap[currentWeatherData] = 1;
+            } else {
+                occuranceMap[currentWeatherData]++; 
+            }  
+            if (occuranceMap[currentWeatherData] > maxCount) {
+                mostCommonElement = currentWeatherData;
+                maxCount = occuranceMap[currentWeatherData];
+            }
+        }
+        
+        return mostCommonElement;
+    }
+
+    function filterLatestWeatherData(weatherDataArray) {
+        // First as baseline
+        let latestPrecipitation = weatherDataArray.find(weatherData => weatherData.type == 'precipitation')
+        let latestTemperature = weatherDataArray.find(weatherData => weatherData.type == 'temperature')
+        let latestWindSpeed = weatherDataArray.find(weatherData => weatherData.type == 'wind speed')
+        let latestCloudCoverage = weatherDataArray.find(weatherData => weatherData.type == 'cloud coverage')
+ 
+        // Seperate the data
+        weatherDataArray.forEach(weatherData => {
+            if (weatherData.type == 'precipitation' && latestPrecipitation.time < weatherData.time) {
+                latestPrecipitation = weatherData
+            } else if (weatherData.type == 'temperature' && latestTemperature.time < weatherData.time) {
+                latestTemperature = weatherData
+            } else if (weatherData.type == 'wind speed' && latestWindSpeed.time < weatherData.time) {
+                latestWindSpeed = weatherData     
+            } else if (weatherData.type == 'cloud coverage' && latestCloudCoverage.time < weatherData.time) {
+                latestCloudCoverage = weatherData     
+            }
+        })
+
+        return { latestPrecipitation, latestTemperature, latestWindSpeed, latestCloudCoverage }
+    }
+
+    function appendWeatherDataRow(table, weatherData) {
+        let row = table.insertRow();
+
+        let typeCell = row.insertCell(0)
+        let valueCell = row.insertCell(1);
+        let unitCell = row.insertCell(2);
+        let timeCell = row.insertCell(3);
+        let placeCell = row.insertCell(4);
+
+        typeCell.innerHTML = weatherData.type
+        valueCell.innerHTML = weatherData.value;
+        unitCell.innerHTML = weatherData.unit; 
+        timeCell.innerHTML = weatherData.time;
+        placeCell.innerHTML = weatherData.place;
+    }
+
+    function getDaysBetween(d1, d2) {
+		var diff = Math.abs(d1.getTime() - d2.getTime());
+		return diff / (1000 * 60 * 60 * 24);
+    };
+
+    function isFromLast5Days(weatherData) {
+        let now = new Date()
+        let weatherDataDate = new Date(weatherData.time)
+        let daysBetween = getDaysBetween(now, weatherDataDate)
+        return daysBetween <= 5
+    }
+
+    function is(weatherData, type) {
+        return weatherData['type'] == type
+    } 
+
+    function showWeatherData() {
+        showLatestMeasurementOfEachKindForLast5Days('Aarhus')
+        showLatestMeasurementOfEachKindForLast5Days('Copenhagen')
+        showLatestMeasurementOfEachKindForLast5Days('Horsens')
+
+        showMinimumTemperatureForLast5Days('Aarhus')
+        showMinimumTemperatureForLast5Days('Copenhagen')
+        showMinimumTemperatureForLast5Days('Horsens')
+
+        showMaximumTemperatureForLast5Days('Aarhus')
+        showMaximumTemperatureForLast5Days('Copenhagen')
+        showMaximumTemperatureForLast5Days('Horsens')
+
+        showTotalPrecipitationForLast5Days('Aarhus')
+        showTotalPrecipitationForLast5Days('Copenhagen')
+        showTotalPrecipitationForLast5Days('Horsens')
+
+        showAverageWindSpeedForLast5Days('Aarhus')
+        showAverageWindSpeedForLast5Days('Copenhagen')
+        showAverageWindSpeedForLast5Days('Horsens')
+
+        showAverageCloudCoverageLast5Days('Aarhus')
+        showAverageCloudCoverageLast5Days('Copenhagen')
+        showAverageCloudCoverageLast5Days('Horsens')
+
+        showDominantWindDirectionTheLast5Days('Aarhus')
+        showDominantWindDirectionTheLast5Days('Copenhagen')
+        showDominantWindDirectionTheLast5Days('Horsens')
+
+        showPredictionsForNext24Hours('Aarhus')
+        showPredictionsForNext24Hours('Copenhagen')
+        showPredictionsForNext24Hours('Horsens')
+    }
+
+    showWeatherData()
+
+</script> -->
+</html>
