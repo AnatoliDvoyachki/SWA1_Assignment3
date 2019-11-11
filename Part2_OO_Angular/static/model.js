@@ -1,5 +1,6 @@
-const model = (weatherData) => {
+const model = (weatherData, forecastData) => {
     let weatherDataMap = {}
+    let forecastDataMap = {}
 
     let latestDataOfEachType = []
     let minimumTemperatureData = []
@@ -8,8 +9,10 @@ const model = (weatherData) => {
     let averageWindSpeed 
     let averageCloudCoverage
     let dominantWindDirection
+    let weatherPredictions = []
 
-    weatherData.forEach(wd => addValueToKey(wd.place, wd))
+    weatherData.forEach(wData => addValueToKey(weatherDataMap, wData.place, wData))
+    forecastData.forEach(forecast => addValueToKey(forecastDataMap, forecast.place, forecast))
 
     latestDataOfEachType = findLatestDataOfEachType(weatherData)
     minimumTemperatureData = findMinimumTemperature(weatherData)
@@ -18,7 +21,9 @@ const model = (weatherData) => {
     averageWindSpeed = getAverageWindSpeed(weatherData)
     averageCloudCoverage = getAverageCloudCoverage(weatherData)
     dominantWindDirection = getDominantWindDirection(weatherData)
-
+   
+    //weatherPredictions = forecastData
+    
     function findLatestDataOfEachType(weatherDataArray) {
         // First as baseline
         let latestPrecipitation = weatherDataArray.find(weatherData => weatherData.type == 'precipitation')
@@ -40,7 +45,6 @@ const model = (weatherData) => {
         })
         
         return { latestPrecipitation, latestTemperature, latestWindSpeed, latestCloudCoverage }
-
     }
 
     function getDaysBetween(d1, d2) {
@@ -114,21 +118,6 @@ const model = (weatherData) => {
         return mostDominantWindDirection
     }
 
-  /*  function getHourlyPredictions(weatherPredictionArray) {
-        let table;
-
-        if (cityName == 'Aarhus')
-        {
-            table = document.getElementById('aarhus_hourly_predictions_table')
-        } else if (cityName == 'Copenhagen') {
-            table = document.getElementById('copenhagen_hourly_predictions_table')
-        } else if (cityName == 'Horsens') {
-            table = document.getElementById('horsens_hourly_predictions_table')    
-        }
-
-        weatherPredictions.forEach(prediction => appendPredictionToTable(table, prediction))
-    }*/
-
     function getHighestOccuringElement(weatherDataArray) {
         if (weatherDataArray.length == 0) {
             return null;
@@ -154,9 +143,9 @@ const model = (weatherData) => {
         return mostCommonElement;
     }
 
-    function addValueToKey(key, value) {
-        weatherDataMap[key] = weatherDataMap[key] || [];
-        weatherDataMap[key].push(value);
+    function addValueToKey(map, key, value) {
+        map[key] = map[key] || [];
+        map[key].push(value);
     }
 
     const showLatestWeatherData = (cityName = "") => {
@@ -222,9 +211,23 @@ const model = (weatherData) => {
         return dominantWindDirection
     }
 
+    const showWeatherForecastData = (cityName = "") => {
+        if (cityName != "") {
+            console.log(cityName)
+            console.log(forecastDataMap[cityName])
+            weatherPredictions = forecastDataMap[cityName]
+        } else {
+            console.log(cityName)
+            console.log(weatherPredictions[Object.keys(forecastDataMap)[0]])
+            weatherPredictions = forecastDataMap[Object.keys(forecastDataMap)[0]]
+        }
+        console.log(weatherPredictions)
+        return weatherPredictions
+    }
+
     return { showLatestWeatherData, showMinimumTemperatureWeatherData, showMaximumTemperatureWeatherData, 
              showTotalPrecipitation, showAverageWindSpeed, showAverageCloudCoverage, 
-             showDominantWindDirection }
+             showDominantWindDirection, showWeatherForecastData }
 }
 
 export default model

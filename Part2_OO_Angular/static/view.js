@@ -5,7 +5,7 @@ export default (window, viewmodel) => {
         const table_body = document.getElementById(tableName)
         const row = table_body.appendChild(document.createElement('tr'))
 
-        let row = table.insertRow();
+        let row = table_body.insertRow();
 
         let typeCell = row.insertCell(0)
         let valueCell = row.insertCell(1);
@@ -20,30 +20,21 @@ export default (window, viewmodel) => {
         placeCell.innerHTML = weatherData.place;
     }
 
-    const appendPredictionToTable(weatherPrediction, tableName) {
+    const appendWeatherPredictionRow = (weatherPrediction, tableName) => {
         const table_body = document.getElementById(tableName)
+        const row = table_body.appendChild(document.createElement('tr'))
+
         let row = table_body.insertRow();
 
         let fromCell = row.insertCell(0)
         let toCell = row.insertCell(1);
-        let detailsCell = row.insertCell(2);
-        let typeCell = row.insertCell(3);
-        let unitCell = row.insertCell(4);
-        let timeCell = row.insertCell(5);
-        let placeCell = row.insertCell(6);
+        let typeCell = row.insertCell(2);
+        let unitCell = row.insertCell(3);
+        let timeCell = row.insertCell(4);
+        let placeCell = row.insertCell(5);
 
         fromCell.innerHTML = weatherPrediction.from
         toCell.innerHTML = weatherPrediction.to;
-
-        if (weatherPrediction['precipitation_types'] != null)
-        {
-            detailsCell.innerHTML = weatherPrediction.precipitation_types.join('\n');
-        } else if (weatherPrediction['directions'] != null) {
-            detailsCell.innerHTML = weatherPrediction.directions.join('\n');
-        } else {
-            detailsCell.innerHTML = ''
-        }
-        
         typeCell.innerHTML = weatherPrediction.type; 
         unitCell.innerHTML = weatherPrediction.unit;
         timeCell.innerHTML = weatherPrediction.time;
@@ -62,7 +53,7 @@ export default (window, viewmodel) => {
         }
     }
 
-    const update = model => {
+    const update = (weatherDataModel) => {
         ensureElementIsEmpty("latest_data_data")
         ensureElementIsEmpty("min_temperature_data")
         ensureElementIsEmpty("max_temperature_data")
@@ -70,14 +61,18 @@ export default (window, viewmodel) => {
         ensureElementIsEmpty("averageWindSpeed")
         ensureElementIsEmpty("averageCloudCoverage")
         ensureElementIsEmpty("dominantWindDirection")
+        ensureElementIsEmpty("hourly_predictions_data")
 
-        model.showLatestWeatherData().forEach(wd => appendWeatherDataRow(wd, "latest_data_data"))
-        model.showMinimumTemperatureWeatherData().forEach(wd => appendWeatherDataRow(wd, "min_temperature_data"))
-        model.showMaximumTemperatureWeatherData().forEach(wd => appendWeatherDataRow(wd, "max_temperature_data"))
-        model.showTotalPrecipitation(totalPrecipitation => appendText(totalPrecipitation, "totalPrecipitation"))
-        model.showAverageWindSpeed(averageWindSpeed => appendText(averageWindSpeed, "averageWindSpeed"))
-        model.showAverageCloudGoverage(averageCloudCoverage => appendText(averageCloudCoverage, "averageCloudCoverage"))
-        model.showDominantWindDirection(dominantWindDirection => appendText(dominantWindDirection, "dominantWindDirection"))
+        console.log(weatherDataModel)
+
+        weatherDataModel.showLatestWeatherData().forEach(wd => appendWeatherDataRow(wd, "latest_data_data"))
+        weatherDataModel.showMinimumTemperatureWeatherData().forEach(wd => appendWeatherDataRow(wd, "min_temperature_data"))
+        weatherDataModel.showMaximumTemperatureWeatherData().forEach(wd => appendWeatherDataRow(wd, "max_temperature_data"))
+        weatherDataModel.showTotalPrecipitation(totalPrecipitation => appendText(totalPrecipitation, "totalPrecipitation"))
+        weatherDataModel.showAverageWindSpeed(averageWindSpeed => appendText(averageWindSpeed, "averageWindSpeed"))
+        weatherDataModel.showAverageCloudGoverage(averageCloudCoverage => appendText(averageCloudCoverage, "averageCloudCoverage"))
+        weatherDataModel.showDominantWindDirection(dominantWindDirection => appendText(dominantWindDirection, "dominantWindDirection"))
+        weatherDataModel.showWeatherForecastData(forecast => appendWeatherPredictionRow(forecast, "hourly_predictions_data"))
     }
 
     viewmodel.addListener(() => update(viewmodel))

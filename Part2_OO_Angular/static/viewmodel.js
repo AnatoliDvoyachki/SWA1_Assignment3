@@ -1,55 +1,66 @@
-export default (init_model) => {
-  let model = init_model
+export default (initWeatherData, initForecastData) => {
+  let weatherDataModel = initWeatherData
+  let forecastDataModel = initForecastData
+
+  console.log(weatherDataModel)
+  console.log(forecastDataModel)
+
   let listeners = []
 
   const addListener = listener => listeners.push(listener)
 
   const notify = () => listeners.forEach(listener => listener())
 
-  const hire = async (id, salary) => {
+/*  const hire = async (id, salary) => {
     const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
     const employee_res = await fetch('http://localhost:8080/employees', { method: 'POST', body: JSON.stringify({salary, manager:false}), headers })
     const employee = await employee_res.json()
     const { employeeId } = employee
     const person_res = await fetch('http://localhost:8080/persons/' + id, { method: 'PATCH', body: JSON.stringify({ employeeId }), headers })
     const person = await person_res.json()
-    model.addEmployee(employee)
-    model.updatePerson(person)
+    weatherDataModel.addEmployee(employee)
+    weatherDataModel.updatePerson(person)
     notify()
-  }
+  }*/
 
   const showLatestWeatherData = (cityName) => {
-      return model.showLatestWeatherData(cityName)
+      return weatherDataModel.showLatestWeatherData(cityName)
   }
 
   const showMinimumTemperatureWeatherData = (cityName) => {
-    return model.showMinimumTemperatureWeatherData(cityName)
+    return weatherDataModel.showMinimumTemperatureWeatherData(cityName)
   }
 
   const showMaximumTemperatureWeatherData = (cityName) => {
-    return model.showMaximumTemperatureWeatherData(cityName)
+    return weatherDataModel.showMaximumTemperatureWeatherData(cityName)
   }
 
   const showTotalPrecipitation = (cityName, bindToView) => {
-    let totalPrecipitation = model.showTotalPrecipitation(cityName)
+    let totalPrecipitation = weatherDataModel.showTotalPrecipitation(cityName)
     bindToView(totalPrecipitation)
   }
 
   const showAverageWindSpeed = (cityName, bindToView) => {
-    let averageWindSpeed = model.showAverageWindSpeed(cityName)
+    let averageWindSpeed = weatherDataModel.showAverageWindSpeed(cityName)
     bindToView(averageWindSpeed)
   }
 
   const showAverageCloudCoverage = (cityName, bindToView) => {
-    let averageCloudCoverage = model.showAverageCloudCoverage(cityName)
+    let averageCloudCoverage = weatherDataModel.showAverageCloudCoverage(cityName)
     bindToView(averageCloudCoverage)
   }
 
   const showDominantWindDirection = (cityName, bindToView) => {
-    let dominantWindDirection = model.showDominantWindDirection(cityName)
+    let dominantWindDirection = weatherDataModel.showDominantWindDirection(cityName)
     bindToView(dominantWindDirection)
   }
 
-  return { addListener, showLatestWeatherData, showMinimumTemperatureWeatherData, showMaximumTemperatureWeatherData, 
-           showTotalPrecipitation, showAverageWindSpeed, showAverageCloudCoverage, showDominantWindDirection }
+  const showHourlyWeatherPredictions = (cityName, bindToView) => {
+    let forecastData = forecastDataModel.showHourlyWeatherPredictions(cityName)
+    bindToView(forecastData)
+  }
+
+  return { addListener, showLatestWeatherData, showMinimumTemperatureWeatherData, 
+           showMaximumTemperatureWeatherData, showTotalPrecipitation, showAverageWindSpeed, 
+           showAverageCloudCoverage, showDominantWindDirection, showHourlyWeatherPredictions }
 }
