@@ -16,19 +16,20 @@
 <body ng-controller="WeatherDataController">
     
     <h3>Select city:</h3>
-    <select ng-model="cityName" ng-change="onCitySelectionChanged()">
+    <select ng-model="cityName" ng-change="onCitySelectionChanged()" [value]="Aarhus">
         <option value="Aarhus">Aarhus</option>
         <option value="Copenhagen">Copenhagen</option>
         <option value="Horsens">Horsens</option>
     </select>
     <h3>From:</h3>
-    <input ng-model="fromDate" id="datetimepicker" type="datetime-local" />
+    <input ng-model="fromDate" id="fromDatePicker" type="date" />
     <h3>To:</h3>
-    <input ng-model="toDate" id="datetimepicker" type="datetime-local" />
+    <input ng-model="toDate" id="toDatePicker" type="date" />
     <button id="reloadDataButton" ng-click="onReloadDataClicked()">Reload Data</button>
+    <button id="createReportButton" ng-click="onCreateReportClicked()">Create Data</button>
     
     <div id='latest_data_div'>
-        <h1>Latest weather data from each type:</h1>
+        <h1>Latest weather data from each type within the selected date interval:</h1>
         <table id='latest_data_table'>
             <thead>
                 <tr>
@@ -51,7 +52,7 @@
     </div>    
 
     <div id='min_temperature_div'>
-        <h1>Minimum temperature recorded within the last 5 days:</h1>
+        <h1>Minimum temperature recorded within the selected date interval:</h1>
             <table id='min_temperature_table'>
                 <thead>
                     <tr>
@@ -74,7 +75,7 @@
    </div>    
 
    <div id='max_temperature_div'>
-            <h1>Maximum temperature recorded within the last 5 days:</h1>
+            <h1>Maximum temperature recorded within the selected date interval:</h1>
             <table id='max_temperature_table'>
                 <thead>
                     <tr>
@@ -97,9 +98,9 @@
     </div>    
 
     <div id = 'base'>
-        <h1 id="totalPrecipitation">Total precipitation within the selected date interval: {{model.totalPrecipitation}}</h1>
-        <h1 id="averageWindSpeed">Average wind speed within the selected date interval: {{model.averageWindSpeed}}</h1>
-        <h1 id="averageCloudCoverage">Average cloud coverage within the selected date interval: {{model.averageCloudCoverage}}</h1>
+        <h1 id="totalPrecipitation">Total precipitation within the selected date interval: {{model.totalPrecipitation}} mm</h1>
+        <h1 id="averageWindSpeed">Average wind speed within the selected date interval: {{model.averageWindSpeed}} m/s</h1>
+        <h1 id="averageCloudCoverage">Average cloud coverage within the selected date interval: {{model.averageCloudCoverage}} %</h1>
         <h1 id="dominantWindDirection">Dominant wind direction within the selected date interval: {{model.dominantWindDirection}}</h1>
     </div>
     

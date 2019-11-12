@@ -22,7 +22,7 @@ export default (window, viewmodel) => {
 
     const appendWeatherPredictionRow = (weatherPrediction, tableName) => {
         const table_body = document.getElementById(tableName)
-        const row = table_body.appendChild(document.createElement('tr'))
+        const row = table_body.appendChild(document.createElement("tr"))
 
         let row = table_body.insertRow();
 
@@ -62,8 +62,6 @@ export default (window, viewmodel) => {
         ensureElementIsEmpty("averageCloudCoverage")
         ensureElementIsEmpty("dominantWindDirection")
         ensureElementIsEmpty("hourly_predictions_data")
-
-        console.log(weatherDataModel)
 
         weatherDataModel.showLatestWeatherData().forEach(wd => appendWeatherDataRow(wd, "latest_data_data"))
         weatherDataModel.showMinimumTemperatureWeatherData().forEach(wd => appendWeatherDataRow(wd, "min_temperature_data"))

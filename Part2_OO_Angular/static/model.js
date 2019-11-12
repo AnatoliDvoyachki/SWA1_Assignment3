@@ -14,32 +14,30 @@ const model = (weatherData, forecastData) => {
     weatherData.forEach(wData => addValueToKey(weatherDataMap, wData.place, wData))
     forecastData.forEach(forecast => addValueToKey(forecastDataMap, forecast.place, forecast))
 
-    latestDataOfEachType = findLatestDataOfEachType(weatherData)
-    minimumTemperatureData = findMinimumTemperature(weatherData)
-    maximumTemperatureData = findMaximumTemperature(weatherData)
+    latestDataOfEachType = getLatestDataOfEachType(weatherData)
+    minimumTemperatureData = getMinTemperature(weatherData)
+    maximumTemperatureData = getMaxTemperature(weatherData)
     totalPrecipitation = getTotalPrecipitation(weatherData)
     averageWindSpeed = getAverageWindSpeed(weatherData)
     averageCloudCoverage = getAverageCloudCoverage(weatherData)
     dominantWindDirection = getDominantWindDirection(weatherData)
    
-    //weatherPredictions = forecastData
-    
-    function findLatestDataOfEachType(weatherDataArray) {
+    function getLatestDataOfEachType(weatherDataArray) {
         // First as baseline
-        let latestPrecipitation = weatherDataArray.find(weatherData => weatherData.type == 'precipitation')
-        let latestTemperature = weatherDataArray.find(weatherData => weatherData.type == 'temperature')
-        let latestWindSpeed = weatherDataArray.find(weatherData => weatherData.type == 'wind speed')
-        let latestCloudCoverage = weatherDataArray.find(weatherData => weatherData.type == 'cloud coverage')
+        let latestPrecipitation = weatherDataArray.find(weatherData => is(weatherData, "precipitation"))
+        let latestTemperature = weatherDataArray.find(weatherData => is(weatherData, "temperature"))
+        let latestWindSpeed = weatherDataArray.find(weatherData => is(weatherData, "wind speed"))
+        let latestCloudCoverage = weatherDataArray.find(weatherData => is(weatherData, "cloud coverage"))
 
         // Seperate the data
         weatherDataArray.forEach(weatherData => {
-            if (weatherData.type == 'precipitation' && latestPrecipitation.time < weatherData.time) {
+            if (is(weatherData, "precipitation") && latestPrecipitation.time < weatherData.time) {
                 latestPrecipitation = weatherData
-            } else if (weatherData.type == 'temperature' && latestTemperature.time < weatherData.time) {
+            } else if (is(weatherData, "temperature") && latestTemperature.time < weatherData.time) {
                 latestTemperature = weatherData
-            } else if (weatherData.type == 'wind speed' && latestWindSpeed.time < weatherData.time) {
+            } else if (is(weatherData, "wind speed") && latestWindSpeed.time < weatherData.time) {
                 latestWindSpeed = weatherData     
-            } else if (weatherData.type == 'cloud coverage' && latestCloudCoverage.time < weatherData.time) {
+            } else if (is(weatherData, "cloud coverage") && latestCloudCoverage.time < weatherData.time) {
                 latestCloudCoverage = weatherData     
             }
         })
@@ -59,61 +57,110 @@ const model = (weatherData, forecastData) => {
         return daysBetween <= 5
     }
 
+    /*function intervalOverlaps(weatherData, fromDate, toDate) {
+        let wdDate = weatherData.time
+        let d1 = fromDate
+        let d2 = toDate
+        
+        console.log(wdDate)
+        console.log(d1)
+        console.log(d2)
+
+        console.log(wdDate >= d1 && wdDate <= d2)
+
+        return wdDate >= d1 && wdDate <= d2
+*/
+        /*fromDate = fromDate == null ? new Date() : new Date(fromDate)
+        toDate = toDate == null ? new Date() : new Date(toDate)
+
+        let weatherDataDateTime = new Date(weatherData.time)*/
+      /*  let d1 = new Date()
+        let d2 = new Date()
+
+        console.log(d1)
+        console.log(d2)
+
+        console.log(d1 < d2)
+
+        return d1 > d2*/
+
+   /*     console.log(fromDate)
+        console.log(toDate)
+*/
+        /*let now = new Date()
+        let weatherDataDate = new Date(weatherData.time)
+        let daysBetween = getDaysBetween(fromDate, toDate)*/
+        /*console.log(weatherDataDateTime >= fromDate && weatherDataDateTime <= toDate)
+        return weatherDataDateTime >= fromDate && weatherDataDateTime <= toDate*/
+        //return daysBetween <= 5
+    
+
+    /*function getDaysBetween(d1, d2) {
+		var diff = Math.abs(d1.getTime() - d2.getTime());
+		return diff / (1000 * 60 * 60 * 24);
+    };*/
+
     function is(weatherData, type) {
-        return weatherData['type'] == type
+        return weatherData["type"] == type
     } 
 
-    function findMinimumTemperature(weatherDataArray) {
-        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, 'temperature') && isFromLast5Days(wd))
+    function getMinTemperature(weatherDataArray, fromDate, toDate) {
+        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, "temperature") && isFromLast5Days(wd))
+        
+        if (temperatureFromLast5Days.length == 0) {
+            return { temperatureFromLast5Days }
+        }
+
         let weatherDataWithMinTemperature = temperatureFromLast5Days.reduce((pre, cur) => {
-            let t1 = pre['value']
-            let t2 = cur['value']
+            let t1 = pre["value"]
+            let t2 = cur["value"]
 
             return t1 < t2 ? pre : cur
         })
         return { weatherDataWithMinTemperature }
     }
 
-    function findMaximumTemperature(weatherDataArray) {
+    function getMaxTemperature(weatherDataArray) {
         // Find max temperature within last 5 days
-        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, 'temperature') && isFromLast5Days(wd))
-        let weatherDataWithMaxTemperature = temperatureFromLast5Days.reduce((pre, cur) => {
-            let t1 = pre['value']
-            let t2 = cur['value']
+        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, "temperature") && isFromLast5Days(wd))
+        let maxTemperature =  temperatureFromLast5Days.reduce((pre, cur) => {
+            let t1 = pre["value"]
+            let t2 = cur["value"]
 
             return t1 > t2 ? pre : cur
         })
-        return { weatherDataWithMaxTemperature }
+
+        return { maxTemperature }
     }
 
     function getTotalPrecipitation(weatherDataArray) {
         // Calculate total precipitaiton
-        let totalPrecipitation = weatherDataArray.filter(wd => is(wd, 'precipitation') && isFromLast5Days(wd))
-                                                 .map(wd => wd['value'])
+        let totalPrecipitation = weatherDataArray.filter(wd => is(wd, "precipitation") && isFromLast5Days(wd))
+                                                 .map(wd => wd["value"])
                                                  .reduce((previousPrecipitation, currentPrecipitation) => previousPrecipitation + currentPrecipitation, 0)
         return totalPrecipitation.toFixed(1)
     }
 
     function getAverageWindSpeed(weatherDataArray) {
         // Calculate average wind speed
-        let averageWindSpeed = weatherDataArray.filter(wd => is(wd, 'wind speed') && isFromLast5Days(wd))
-                                               .map(wd => wd['value'])
+        let averageWindSpeed = weatherDataArray.filter(wd => is(wd, "wind speed") && isFromLast5Days(wd))
+                                               .map(wd => wd["value"])
                                                .reduce((previousWindSpeed, currentWindSpeed) => previousWindSpeed + currentWindSpeed, 0) / weatherDataArray.length
         return averageWindSpeed.toFixed(1);
     }
 
     function getAverageCloudCoverage(weatherDataArray) {
         // Calculate average wind speed
-        let averageCloudCoverage = weatherDataArray.filter(wd => is(wd, 'cloud coverage') && isFromLast5Days(wd))
-                                                   .map(wd => wd['value'])
+        let averageCloudCoverage = weatherDataArray.filter(wd => is(wd, "cloud coverage") && isFromLast5Days(wd))
+                                                   .map(wd => wd["value"])
                                                    .reduce((previousCloudCoverage, currentCloudCoverage) => previousCloudCoverage + currentCloudCoverage, 0) / weatherDataArray.length
         return averageCloudCoverage.toFixed(1)
     }
 
     function getDominantWindDirection(weatherDataArray) {
-        // Calculate average wind speed
-        let windDirectionsFromLast5Days = weatherDataArray.filter(wd => is(wd, 'wind speed') && isFromLast5Days(wd))
-                                                          .map(wd => wd['direction'])
+        // Estimate dominant wind direction
+        let windDirectionsFromLast5Days = weatherDataArray.filter(wd => is(wd, "wind speed") && isFromLast5Days(wd))
+                                                          .map(wd => wd["direction"])
         let mostDominantWindDirection = getHighestOccuringElement(windDirectionsFromLast5Days)
         return mostDominantWindDirection
     }
@@ -148,86 +195,77 @@ const model = (weatherData, forecastData) => {
         map[key].push(value);
     }
 
-    const showLatestWeatherData = (cityName = "") => {
-        if (cityName != "") {
-            latestDataOfEachType = findLatestDataOfEachType(weatherDataMap[cityName]) 
-        } else {
-            latestDataOfEachType = findLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showLatestWeatherData(cityName = "", fromDate, toDate) {
+        latestDataOfEachType = cityName != ""
+                               ? getLatestDataOfEachType(weatherDataMap[cityName])
+                               : getLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return latestDataOfEachType
     }
 
-    const showMinimumTemperatureWeatherData = (cityName = "") => {
-        if (cityName != "") {
-            minimumTemperatureData = findMinimumTemperature(weatherDataMap[cityName]) 
-        } else {
-            minimumTemperatureData = findMinimumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showMinimumTemperatureWeatherData(cityName = "", fromDate, toDate) {
+        minimumTemperatureData = cityName != ""
+                                 ? getMinTemperature(weatherDataMap[cityName], fromDate, toDate)
+                                 : getMinTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return minimumTemperatureData
     }
 
-    const showMaximumTemperatureWeatherData = (cityName = "") => {
-        if (cityName != "") {
-            maximumTemperatureData = findMaximumTemperature(weatherDataMap[cityName]) 
-        } else {
-            maximumTemperatureData = findMaximumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showMaxTemperatureWeatherData(cityName = "") {
+        maximumTemperatureData = cityName != ""
+                                 ? getMaxTemperature(weatherDataMap[cityName])
+                                 : getMaxTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return maximumTemperatureData
     }
 
-    const showTotalPrecipitation = (cityName = "") => {
-        if (cityName != "") {
-            totalPrecipitation = getTotalPrecipitation(weatherDataMap[cityName]) 
-        } else {
-            totalPrecipitation = getTotalPrecipitation(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showTotalPrecipitation(cityName = "") {
+        totalPrecipitation = cityName != ""
+                             ? getTotalPrecipitation(weatherDataMap[cityName])
+                             : getTotalPrecipitation(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return totalPrecipitation
     }
 
-    const showAverageWindSpeed = (cityName = "") => {
-        if (cityName != "") {
-            averageWindSpeed = getAverageWindSpeed(weatherDataMap[cityName]) 
-        } else {
-            averageWindSpeed = getAverageWindSpeed(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showAverageWindSpeed(cityName = "") {
+        averageWindSpeed = cityName != ""
+                           ? getAverageWindSpeed(weatherDataMap[cityName])
+                           : getAverageWindSpeed(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return averageWindSpeed
     }
 
-    const showAverageCloudCoverage = (cityName = "") => {
-        if (cityName != "") {
-            averageCloudCoverage = getAverageCloudCoverage(weatherDataMap[cityName]) 
-        } else {
-            averageCloudCoverage = getAverageCloudCoverage(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showAverageCloudCoverage(cityName = "") {
+        averageCloudCoverage = cityName != ""
+                               ? getAverageCloudCoverage(weatherDataMap[cityName])
+                               : getAverageCloudCoverage(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return averageCloudCoverage
     }
 
-    const showDominantWindDirection = (cityName = "") => {
-        if (cityName != "") {
-            dominantWindDirection = getDominantWindDirection(weatherDataMap[cityName]) 
-        } else {
-            dominantWindDirection = getDominantWindDirection(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-        }
+    function showDominantWindDirection(cityName = "") {
+        dominantWindDirection = cityName != ""
+                                ? getDominantWindDirection(weatherDataMap[cityName])
+                                : getDominantWindDirection(weatherDataMap[Object.keys(weatherDataMap)[0]])
+
         return dominantWindDirection
     }
 
-    const showWeatherForecastData = (cityName = "") => {
-        if (cityName != "") {
-            console.log(cityName)
-            console.log(forecastDataMap[cityName])
-            weatherPredictions = forecastDataMap[cityName]
-        } else {
-            console.log(cityName)
-            console.log(weatherPredictions[Object.keys(forecastDataMap)[0]])
-            weatherPredictions = forecastDataMap[Object.keys(forecastDataMap)[0]]
-        }
-        console.log(weatherPredictions)
+    function showWeatherForecastData(cityName = "") {
+        weatherPredictions = cityName != "" 
+                            ? forecastDataMap[cityName]
+                            : forecastDataMap[Object.keys(forecastDataMap)[0]]
+
         return weatherPredictions
     }
 
-    return { showLatestWeatherData, showMinimumTemperatureWeatherData, showMaximumTemperatureWeatherData, 
+    function addWeatherDataReport(newWeatherData) {
+        addValueToKey(weatherDataMap, newWeatherData.place, newWeatherData)
+    }
+
+    return { showLatestWeatherData, showMinimumTemperatureWeatherData, showMaximumTemperatureWeatherData: showMaxTemperatureWeatherData, 
              showTotalPrecipitation, showAverageWindSpeed, showAverageCloudCoverage, 
-             showDominantWindDirection, showWeatherForecastData }
+             showDominantWindDirection, showWeatherForecastData, addWeatherDataReport }
 }
 
 export default model
