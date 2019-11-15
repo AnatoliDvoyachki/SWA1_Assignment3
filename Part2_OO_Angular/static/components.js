@@ -45,8 +45,6 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
           const headers = { "Content-Type": "application/json", Accept: "application/json" }
           $http.post("http://localhost:8080/data/", newWeatherReport, { headers })
               .then(({data: p}) => {
-                // $scope.model = $model
-                  //aModel.addWeatherDataReport(p)
                   loadData(aModel, $scope, $http)
                 })
       }
