@@ -14,7 +14,7 @@ const model = (weatherData, forecastData) => {
     weatherData.forEach(wData => addValueToKey(weatherDataMap, wData.place, wData))
     forecastData.forEach(forecast => addValueToKey(forecastDataMap, forecast.place, forecast))
 
-    latestDataOfEachType = getLatestDataOfEachType(weatherData)
+    latestDataOfEachType = getLatestDataOfEachType(weatherData, null, null)
     minimumTemperatureData = getMinTemperature(weatherData)
     maximumTemperatureData = getMaxTemperature(weatherData)
     totalPrecipitation = getTotalPrecipitation(weatherData)
@@ -22,8 +22,9 @@ const model = (weatherData, forecastData) => {
     averageCloudCoverage = getAverageCloudCoverage(weatherData)
     dominantWindDirection = getDominantWindDirection(weatherData)
    
-    function getLatestDataOfEachType(weatherDataArray) {
+    function getLatestDataOfEachType(weatherDataArray, fromDate, toDate) {
         // First as baseline
+        console.log(weatherDataArray)
         let latestPrecipitation = weatherDataArray.find(weatherData => is(weatherData, "precipitation"))
         let latestTemperature = weatherDataArray.find(weatherData => is(weatherData, "temperature"))
         let latestWindSpeed = weatherDataArray.find(weatherData => is(weatherData, "wind speed"))
@@ -31,13 +32,14 @@ const model = (weatherData, forecastData) => {
 
         // Seperate the data
         weatherDataArray.forEach(weatherData => {
-            if (is(weatherData, "precipitation") && latestPrecipitation.time < weatherData.time) {
+            let inDateInterval = intervalOverlaps(weatherData, fromDate, toDate)
+            if (is(weatherData, "precipitation") && latestPrecipitation.time < weatherData.time && inDateInterval) {
                 latestPrecipitation = weatherData
-            } else if (is(weatherData, "temperature") && latestTemperature.time < weatherData.time) {
+            } else if (is(weatherData, "temperature") && latestTemperature.time < weatherData.time && inDateInterval) {
                 latestTemperature = weatherData
-            } else if (is(weatherData, "wind speed") && latestWindSpeed.time < weatherData.time) {
+            } else if (is(weatherData, "wind speed") && latestWindSpeed.time < weatherData.time && inDateInterval) {
                 latestWindSpeed = weatherData     
-            } else if (is(weatherData, "cloud coverage") && latestCloudCoverage.time < weatherData.time) {
+            } else if (is(weatherData, "cloud coverage") && latestCloudCoverage.time < weatherData.time && inDateInterval) {
                 latestCloudCoverage = weatherData     
             }
         })
@@ -57,55 +59,21 @@ const model = (weatherData, forecastData) => {
         return daysBetween <= 5
     }
 
-    /*function intervalOverlaps(weatherData, fromDate, toDate) {
-        let wdDate = weatherData.time
-        let d1 = fromDate
-        let d2 = toDate
-        
-        console.log(wdDate)
-        console.log(d1)
-        console.log(d2)
+    function intervalOverlaps(weatherData, fromDate, toDate) {
+        if (fromDate == null || toDate == null) {
+            // Ignore missing date input
+            return true;
+        }
 
-        console.log(wdDate >= d1 && wdDate <= d2)
-
-        return wdDate >= d1 && wdDate <= d2
-*/
-        /*fromDate = fromDate == null ? new Date() : new Date(fromDate)
-        toDate = toDate == null ? new Date() : new Date(toDate)
-
-        let weatherDataDateTime = new Date(weatherData.time)*/
-      /*  let d1 = new Date()
-        let d2 = new Date()
-
-        console.log(d1)
-        console.log(d2)
-
-        console.log(d1 < d2)
-
-        return d1 > d2*/
-
-   /*     console.log(fromDate)
-        console.log(toDate)
-*/
-        /*let now = new Date()
-        let weatherDataDate = new Date(weatherData.time)
-        let daysBetween = getDaysBetween(fromDate, toDate)*/
-        /*console.log(weatherDataDateTime >= fromDate && weatherDataDateTime <= toDate)
-        return weatherDataDateTime >= fromDate && weatherDataDateTime <= toDate*/
-        //return daysBetween <= 5
-    
-
-    /*function getDaysBetween(d1, d2) {
-		var diff = Math.abs(d1.getTime() - d2.getTime());
-		return diff / (1000 * 60 * 60 * 24);
-    };*/
+        return weatherData.time >= fromDate && weatherData.time <= toDate
+    }
 
     function is(weatherData, type) {
         return weatherData["type"] == type
     } 
 
     function getMinTemperature(weatherDataArray, fromDate, toDate) {
-        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, "temperature") && isFromLast5Days(wd))
+        let temperatureFromLast5Days = weatherDataArray.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
         
         if (temperatureFromLast5Days.length == 0) {
             return { temperatureFromLast5Days }
@@ -197,8 +165,8 @@ const model = (weatherData, forecastData) => {
 
     function showLatestWeatherData(cityName = "", fromDate, toDate) {
         latestDataOfEachType = cityName != ""
-                               ? getLatestDataOfEachType(weatherDataMap[cityName])
-                               : getLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]])
+                               ? getLatestDataOfEachType(weatherDataMap[cityName], fromDate, toDate)
+                               : getLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]], fromDate, toDate)
 
         return latestDataOfEachType
     }
@@ -251,7 +219,7 @@ const model = (weatherData, forecastData) => {
         return dominantWindDirection
     }
 
-    function showWeatherForecastData(cityName = "") {
+    function showWeatherForecastData() {
         weatherPredictions = cityName != "" 
                             ? forecastDataMap[cityName]
                             : forecastDataMap[Object.keys(forecastDataMap)[0]]
@@ -261,6 +229,9 @@ const model = (weatherData, forecastData) => {
 
     function addWeatherDataReport(newWeatherData) {
         addValueToKey(weatherDataMap, newWeatherData.place, newWeatherData)
+        if (is(weatherData, "temperature")) {
+            minimumTemperatureData.push(weatherData)
+        } 
     }
 
     return { showLatestWeatherData, showMinimumTemperatureWeatherData, showMaximumTemperatureWeatherData: showMaxTemperatureWeatherData, 

@@ -22,9 +22,9 @@
         <option value="Horsens">Horsens</option>
     </select>
     <h3>From:</h3>
-    <input ng-model="fromDate" id="fromDatePicker" type="date" />
+    <input ng-model="fromDate" id="fromDatePicker" ng-change="onDateChanged()" type="date" />
     <h3>To:</h3>
-    <input ng-model="toDate" id="toDatePicker" type="date" />
+    <input ng-model="toDate" id="toDatePicker" ng-change="onDateChanged()" type="date" />
     <button id="reloadDataButton" ng-click="onReloadDataClicked()">Reload Data</button>
     <button id="createReportButton" ng-click="onCreateReportClicked()">Create Data</button>
     

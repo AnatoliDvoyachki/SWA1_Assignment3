@@ -20,6 +20,10 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
           loadData(aModel, $scope, $http)
       }
 
+      $scope.onDateChanged = () => {
+        loadData(aModel, $scope, $http)
+      }
+
       $scope.onCreateReportClicked = () => {
         var type = prompt("Please enter weather data type");
         var time = prompt("Please enter weather data time");
@@ -35,13 +39,13 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
             unit: unit
         }]
         
-        const headers = { "Content-Type": "application/json", Accept: "application/json" }
+        /*const headers = { "Content-Type": "application/json", Accept: "application/json" }
         $http.post("http://localhost:8080/data/", newWeatherReport, { headers })
              .then(({data: p}) => {
                // $scope.model = $model
                 aModel.addWeatherDataReport(p)
                 loadData(aModel, $scope, $http)
-              })
+              })*/
       }
 })
 
@@ -50,8 +54,11 @@ function loadData(aModel, $scope, $http) {
       let weatherForecastUrl = "http://localhost:8080/forecast/"
   
       const cityName = $scope.cityName
-      const fromDate = $scope.fromDate
-      const toDate = $scope.toDate
+      const fromDate = new Date($scope.fromDate)
+      const toDate = new Date($scope.toDate)
+
+      console.log(fromDate > toDate)
+      console.log(fromDate < toDate)
 
       console.log(fromDate)
       console.log(toDate)
@@ -66,6 +73,10 @@ function loadData(aModel, $scope, $http) {
            $http.get(weatherForecastUrl)
                 .then(({data: weatherPredictionData}) => {
                     aModel = model(weatherData, weatherPredictionData)
+                   
+                   console.log(weatherData)
+                   console.log(weatherPredictionData)
+                   
                     $scope.model.latestDataOfEachType = aModel.showLatestWeatherData(fromDate, toDate)
                     $scope.model.minimumTemperatureData = aModel.showMinimumTemperatureWeatherData()
                     $scope.model.maximumTemperatureData = aModel.showMaximumTemperatureWeatherData()

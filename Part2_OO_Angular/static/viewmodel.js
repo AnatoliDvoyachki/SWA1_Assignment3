@@ -61,11 +61,11 @@ export default (initWeatherData, initForecastData) => {
       bindToView(forecastData)
   }
 
-  function addWeatherPrediction(newWeatherData) {
+  /*function addWeatherPrediction(newWeatherData) {
       weatherDataModel.addWeatherDataReport(newWeatherData)
-      notify()
+      notify()*/
       // bindToView(weatherData)
-  }
+ // }
 
   return { addListener, showLatestWeatherData, showMinimumTemperatureWeatherData, 
            showMaximumTemperatureWeatherData, showTotalPrecipitation, showAverageWindSpeed, 
