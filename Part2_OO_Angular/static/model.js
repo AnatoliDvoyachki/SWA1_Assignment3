@@ -9,14 +9,14 @@ const model = (weatherData, forecastData) => {
 
         // Seperate the data
         weatherData.forEach(wd => {
-            let inDateInterval = intervalOverlaps(wd, fromDate, toDate)      
-            if (is(wd, "precipitation") && latestPrecipitation.time < wd.time && inDateInterval) {
+            let overlaps = intervalOverlaps(wd, fromDate, toDate)      
+            if (is(wd, "precipitation") && latestPrecipitation.time < wd.time && overlaps) {
                 latestPrecipitation = wd
-            } else if (is(wd, "temperature") && latestTemperature.time < wd.time && inDateInterval) {
+            } else if (is(wd, "temperature") && latestTemperature.time < wd.time && overlaps) {
                 latestTemperature = wd
-            } else if (is(wd, "wind speed") && latestWindSpeed.time < wd.time && inDateInterval) {
+            } else if (is(wd, "wind speed") && latestWindSpeed.time < wd.time && overlaps) {
                 latestWindSpeed = wd     
-            } else if (is(wd, "cloud coverage") && latestCloudCoverage.time < wd.time && inDateInterval) {
+            } else if (is(wd, "cloud coverage") && latestCloudCoverage.time < wd.time && overlaps) {
                 latestCloudCoverage = wd     
             }
         })
@@ -25,9 +25,13 @@ const model = (weatherData, forecastData) => {
     }
 
     function getMinTemperature(fromDate, toDate) {
-        let minTemperature = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
+        let temperatureValues = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
         
-        let weatherDataWithMinTemperature = minTemperature.reduce((pre, cur) => {
+        if (temperatureValues.length == 0) {
+            return {  }
+        }
+
+        let weatherDataWithMinTemperature = temperatureValues.reduce((pre, cur) => {
             let t1 = pre["value"]
             let t2 = cur["value"]
 
@@ -51,25 +55,39 @@ const model = (weatherData, forecastData) => {
     }
 
     function getTotalPrecipitation(fromDate, toDate) {
-        let totalPrecipitation = weatherData.filter(wd => is(wd, "precipitation") && intervalOverlaps(wd, fromDate, toDate))
-                                            .map(wd => wd["value"])
-                                            .reduce((previousPrecipitation, currentPrecipitation) => previousPrecipitation + currentPrecipitation, 0)
+        let precipitationValues = weatherData.filter(wd => is(wd, "precipitation") && intervalOverlaps(wd, fromDate, toDate))
+                                             .map(wd => wd["value"])
 
+        if (precipitationValues.length == 0) {
+            return ""
+        }
+
+        let totalPrecipitation = precipitationValues.reduce((previousPrecipitation, currentPrecipitation) => previousPrecipitation + currentPrecipitation, 0)
         return totalPrecipitation.toFixed(1)
     }
 
     function getAverageWindSpeed(fromDate, toDate) {
-        let averageWindSpeed = weatherData.filter(wd => is(wd, "wind speed") && intervalOverlaps(wd, fromDate, toDate))
-                                          .map(wd => wd["value"])
-                                          .reduce((previousWindSpeed, currentWindSpeed) => previousWindSpeed + currentWindSpeed, 0) / weatherData.length
+        let windSpeedValues = weatherData.filter(wd => is(wd, "wind speed") && intervalOverlaps(wd, fromDate, toDate))
+                                         .map(wd => wd["value"])
+                       
+        if (windSpeedValues.length == 0) {
+            return ""
+        }
+
+        let averageWindSpeed = windSpeedValues.reduce((previousWindSpeed, currentWindSpeed) => previousWindSpeed + currentWindSpeed, 0) / weatherData.length
                                           
         return averageWindSpeed.toFixed(1);
     }
 
     function getAverageCloudCoverage(fromDate, toDate) {
-        let averageCloudCoverage = weatherData.filter(wd => is(wd, "cloud coverage") && intervalOverlaps(wd, fromDate, toDate))
-                                              .map(wd => wd["value"])
-                                              .reduce((previousCloudCoverage, currentCloudCoverage) => previousCloudCoverage + currentCloudCoverage, 0) / weatherData.length
+        let cloudCoverageValues = weatherData.filter(wd => is(wd, "cloud coverage") && intervalOverlaps(wd, fromDate, toDate))
+                                             .map(wd => wd["value"])
+             
+        if (cloudCoverageValues.length == 0) {
+            return ""
+        }
+
+        let averageCloudCoverage = cloudCoverageValues.reduce((previousCloudCoverage, currentCloudCoverage) => previousCloudCoverage + currentCloudCoverage, 0) / weatherData.length
         return averageCloudCoverage.toFixed(1)
     }
 
