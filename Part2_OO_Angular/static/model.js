@@ -42,9 +42,13 @@ const model = (weatherData, forecastData) => {
     }
 
     function getMaxTemperature(fromDate, toDate) {
-        let temperatureFromLast5Days = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
+        let temperatures = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
         
-        let maxTemperature =  temperatureFromLast5Days.reduce((pre, cur) => {
+        if (temperatures.length == 0) {
+            return { }
+        }
+
+        let maxTemperature =  temperatures.reduce((pre, cur) => {
             let t1 = pre["value"]
             let t2 = cur["value"]
 

@@ -11,9 +11,8 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
       loadData(aModel, $scope, $http)
 
       // On city selection changed event handler
-      $scope.onCitySelectionChanged = () => {
-          loadData(aModel, $scope, $http)
-      }
+      $scope.onCitySelectionChanged = () => loadData(aModel, $scope, $http)
+      
 
       // On reload data button click event handler
       $scope.onReloadDataClicked = () => {
@@ -22,9 +21,8 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
       }
 
       // On date picker value changed event handler
-      $scope.onDateChanged = () => {   
-          loadData(aModel, $scope, $http)
-      }
+      $scope.onDateChanged = () => loadData(aModel, $scope, $http)
+      
 
       // On create report click event handler
       $scope.onCreateReportClicked = () => {
@@ -34,19 +32,18 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
           var value = prompt("Please enter weather data value");
           var unit = prompt("Please enter weather data unit");
           
-          let newWeatherReport = [{
-              type: type,
-              time: time,
-              place: place,
-              value: value,
-              unit: unit
+          let newWeatherReport = 
+          [{
+              type,
+              time,
+              place,
+              value,
+              unit
           }]
         
           const headers = { "Content-Type": "application/json", Accept: "application/json" }
           $http.post("http://localhost:8080/data/", newWeatherReport, { headers })
-              .then(({data: p}) => {
-                  loadData(aModel, $scope, $http)
-                })
+               .then(() => loadData(aModel, $scope, $http)) // Refresh data bindings after new weather data is added
       }
 })
 
@@ -56,7 +53,7 @@ function loadData(aModel, $scope, $http) {
   
       const cityName = $scope.cityName != null
                           ? $scope.cityName
-                          : ""
+                          : "" // Default empty to get all city data
 
       const fromDate = $scope.fromDate != null 
                           ? new Date($scope.fromDate) 
@@ -83,7 +80,7 @@ function loadData(aModel, $scope, $http) {
                   $scope.model.averageCloudCoverage = aModel.getAverageCloudCoverage(fromDate, toDate)
                   $scope.model.dominantWindDirection = aModel.getDominantWindDirection(fromDate, toDate) 
                   $scope.model.weatherPredictions = aModel.getWeatherForecastData(fromDate, toDate)
-            })         
+            })
       }).catch(console.error) 
 }
 
