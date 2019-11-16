@@ -122,76 +122,31 @@ const addValueToKey = (map, key, value) => {
     map[key].push(value);
 }
 
-const showLatestWeatherData = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        latestDataOfEachType = findLatestDataOfEachType(weatherDataMap[cityName]) 
-    } else {
-        latestDataOfEachType = findLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return latestDataOfEachType
-}
+const showLatestWeatherData = (weatherDataMap) => 
+    findLatestDataOfEachType(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showMinimumTemperatureWeatherData = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        minimumTemperatureData = findMinimumTemperature(weatherDataMap[cityName]) 
-    } else {
-        minimumTemperatureData = findMinimumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return minimumTemperatureData
-}
+const showMinimumTemperatureWeatherData = (weatherDataMap) => 
+    findMinimumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showMaximumTemperatureWeatherData = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        maximumTemperatureData = findMaximumTemperature(weatherDataMap[cityName]) 
-    } else {
-        maximumTemperatureData = findMaximumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return maximumTemperatureData
-}
+const showMaximumTemperatureWeatherData = (weatherDataMap) => 
+    findMaximumTemperature(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showTotalPrecipitation = (cityName = "", weatherDataMap) => 
+const showTotalPrecipitation = (weatherDataMap) => 
     getTotalPrecipitation(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
+const showAverageWindSpeed = (weatherDataMap) => 
+    getAverageWindSpeed(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showAverageWindSpeed = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        averageWindSpeed = getAverageWindSpeed(weatherDataMap[cityName]) 
-    } else {
-        averageWindSpeed = getAverageWindSpeed(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return averageWindSpeed
-}
+const showAverageCloudCoverage = (weatherDataMap) => 
+    getAverageCloudCoverage(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showAverageCloudCoverage = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        averageCloudCoverage = getAverageCloudCoverage(weatherDataMap[cityName]) 
-    } else {
-        averageCloudCoverage = getAverageCloudCoverage(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return averageCloudCoverage
-}
+const showDominantWindDirection = (weatherDataMap) => 
+    dominantWindDirection = getDominantWindDirection(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
 
-const showDominantWindDirection = (cityName = "", weatherDataMap) => {
-    if (cityName != "") {
-        dominantWindDirection = getDominantWindDirection(weatherDataMap[cityName]) 
-    } else {
-        dominantWindDirection = getDominantWindDirection(weatherDataMap[Object.keys(weatherDataMap)[0]]) 
-    }
-    return dominantWindDirection
-}
-
-const showWeatherForecastData = (cityName = "", forecastDataMap) => {
-    if (cityName != "") {
-        console.log(cityName)
-        console.log(forecastDataMap[cityName])
-        weatherPredictions = forecastDataMap[cityName]
-    } else {
+const showWeatherForecastData = (forecastDataMap) => {
         console.log(cityName)
         console.log(weatherPredictions[Object.keys(forecastDataMap)[0]])
-        weatherPredictions = forecastDataMap[Object.keys(forecastDataMap)[0]]
-    }
-    console.log(weatherPredictions)
-    return weatherPredictions
+        return forecastDataMap[Object.keys(forecastDataMap)[0]]
 }
 
 export {findLatestDataOfEachType,getDaysBetween,isFromLast5Days,
