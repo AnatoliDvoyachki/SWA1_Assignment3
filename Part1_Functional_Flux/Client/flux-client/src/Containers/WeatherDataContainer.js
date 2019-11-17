@@ -1,5 +1,6 @@
 import React from 'react';
 import WeatherData from '../Components/WeatherData';
+import WeatherDataPrediction from '../Components/WeatherPredictionData'
 
 
 import { getLatestDataOfEachType,getMinTemperature,
@@ -7,7 +8,7 @@ import { getLatestDataOfEachType,getMinTemperature,
   getAverageCloudCoverage,getDominantWindDirection,
   getWeatherForecastData} from '../util/WeatherDataHelpers';
 
-import { getData,weatherDataUrl,weatherForecastUrl, postData }
+import { getData,weatherDataUrl,weatherForecastUrl }
  from '../util/ServerCommunicator';
 import { getDate5DaysAgo, getCurrentDate } from '../util/DateHelpers';
 
@@ -32,7 +33,6 @@ class WeatherDataContainer extends React.Component{
         dominantWindDirection: "",
         weatherPredictions: []
     };
-    //this.initializeDates();
     this.loadData();
 
   }
@@ -40,7 +40,6 @@ class WeatherDataContainer extends React.Component{
 render() {
   let latestDataOfEachType = this.state.latestDataOfEachType
   let weatherPredictions = this.state.weatherPredictions
-  console.log("Render method called");
   return (
     <div className="App">
       <header className="App-header">
@@ -126,9 +125,11 @@ render() {
             {
                 Object.keys(weatherPredictions).map((keyName, i) =>{
                     return (
-                            <WeatherData 
+                            <WeatherDataPrediction 
+
+                                from = {weatherPredictions[keyName].from}
+                                to = {weatherPredictions[keyName].to}
                                 type = {weatherPredictions[keyName].type}
-                                value = {weatherPredictions[keyName].value}
                                 unit = {weatherPredictions[keyName].unit}
                                 time = {weatherPredictions[keyName].time}
                                 place = {weatherPredictions[keyName].place}
@@ -137,8 +138,6 @@ render() {
                     )
                 })
             }
-        <div> 
-        </div>
         
       </header>
     </div>
@@ -146,24 +145,14 @@ render() {
 }
 
 handleCitySelected(val){
-/*this.setState({
-    selectedCity: val.target.value
-  });*/
   this.loadData(this.state.startDate,this.state.endDate,val.target.value);
 }
 handleStartDateChange = date => {
-    /*this.setState({
-      startDate: date
-    });*/
     this.loadData(date,this.state.endDate,this.state.selectedCity);
-    //this.loadData();
   };
   handleEndDateChange = date => {
-    /*this.setState({
-      endDate: date
-    });*/
+
     this.loadData(this.state.startDate,date,this.state.selectedCity);
-    //this.loadData();
   };
 
 async loadData(startDate = this.state.startDate, endDate = this.state.endDate, selectedCity = this.state.selectedCity) {
@@ -177,7 +166,6 @@ async loadData(startDate = this.state.startDate, endDate = this.state.endDate, s
 
     let weatherData = await getData(dataUrl).then(res => res.json());
     let weatherForecastData = await getData(forecastUrl).then(res => res.json());
-    console.log(weatherData)
 
     let latestWeatherData = getLatestDataOfEachType(fromDate,toDate,weatherData);
     let minTempData = getMinTemperature(fromDate,toDate,weatherData).minTemperature;
@@ -188,7 +176,6 @@ async loadData(startDate = this.state.startDate, endDate = this.state.endDate, s
     let newDominantWindDirection = getDominantWindDirection(fromDate,toDate,weatherData);
     let newWeatherPredictions = getWeatherForecastData(fromDate,toDate,weatherForecastData);
 
-    console.log(newWeatherPredictions)
 
     this.setState({
         latestDataOfEachType : latestWeatherData,
@@ -245,8 +232,8 @@ async loadData(startDate = this.state.startDate, endDate = this.state.endDate, s
         value,
         unit
     }]
-  
-    //console.log(newWeatherReport)
+
+    let reqBody = JSON.stringify(newWeatherReport);
 
     const headers = { "Content-Type": "application/json", Accept: "application/json" }
 
@@ -255,11 +242,8 @@ async loadData(startDate = this.state.startDate, endDate = this.state.endDate, s
         mode: 'cors',
         credentials: 'same-origin',
         headers: headers,
-            body: newWeatherReport
-            })
-
-    /*postData("http://localhost:8080/data/", newWeatherReport/*, { headers })
-         .then(() => this.loadData()) // Refresh data bindings after new weather data is added*/
+            body: reqBody
+            }).then(() => this.loadData())
   }
 
 }
