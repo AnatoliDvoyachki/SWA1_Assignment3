@@ -141,6 +141,7 @@ handleStartDateChange = date => {
   }
   mapWeatherDataObjects(data){
     Object.keys(data).map((keyName, i) =>{
+        console.log(data[keyName].type)
         return (
             <li className="weatherData" key={i}>
                 <WeatherData 
