@@ -100,6 +100,8 @@ function getDominantWindDirection(fromDate, toDate,weatherData) {
 }
 
 function getWeatherForecastData(fromDate, toDate, forecastData) {
+    console.log("Debugging Weather forecast data function")
+    console.log(forecastData)
     return forecastData.filter(forecast => intervalOverlaps(forecast, fromDate, toDate))
 }
 

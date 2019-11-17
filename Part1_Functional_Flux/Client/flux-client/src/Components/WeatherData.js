@@ -18,12 +18,7 @@ class WeatherData extends React.Component {
       
       return (
         <div className="weather-data">
-          <h1>Weather Data:</h1>
-            <p> Type: {this.props.type} </p>
-            <p> Value {this.props.value} </p>
-            <p> Unit {this.props.unit} </p>
-            <p> Time {this.props.time} </p>
-            <p> Place {this.props.place} </p>
+            <p> Type: {this.props.type},  Value {this.props.value}, Unit {this.props.unit}, Time {this.props.time}, Place {this.props.place}   </p>
         </div>
       );
     }

@@ -7,7 +7,7 @@ import { getLatestDataOfEachType,getMinTemperature,
   getAverageCloudCoverage,getDominantWindDirection,
   getWeatherForecastData} from '../util/WeatherDataHelpers';
 
-import { getData,weatherDataUrl,weatherForecastUrl }
+import { getData,weatherDataUrl,weatherForecastUrl, postData }
  from '../util/ServerCommunicator';
 import { getDate5DaysAgo, getCurrentDate } from '../util/DateHelpers';
 
@@ -24,13 +24,13 @@ class WeatherDataContainer extends React.Component{
         startDate: getDate5DaysAgo(),
         endDate: getCurrentDate(),
         latestDataOfEachType: [],
-        minimumTemperatureData: null,
-        maximumTemperatureData: null,
-        totalPrecipitation: null,
-        averageWindSpeed: null,
-        averageCloudCoverage: null,
-        dominantWindDirection: null,
-        weatherPredictions: null
+        minimumTemperatureData: {},
+        maximumTemperatureData: {},
+        totalPrecipitation: 0,
+        averageWindSpeed: 0,
+        averageCloudCoverage: 0,
+        dominantWindDirection: "",
+        weatherPredictions: []
     };
     //this.initializeDates();
     this.loadData();
@@ -39,12 +39,15 @@ class WeatherDataContainer extends React.Component{
 
 render() {
   let latestDataOfEachType = this.state.latestDataOfEachType
-  console.log(latestDataOfEachType[1]);
+  let weatherPredictions = this.state.weatherPredictions
+  console.log("Render method called");
   return (
     <div className="App">
       <header className="App-header">
 
         <div> 
+            <button onClick={e => this.onCreateReportClicked()}>Create Data</button>
+            <button onClick={e => this.loadData()}>Refresh Data</button>
             <select value = {this.state.selectedCity}
                 onChange={(e) => this.handleCitySelected(e)}
                 >
@@ -71,7 +74,70 @@ render() {
 
         <div>
           <p>Latest Weather Data:</p>
-          {this.mapWeatherDataObjects(this.state.latestDataOfEachType)}
+            {
+                Object.keys(latestDataOfEachType).map((keyName, i) =>{
+                    return (
+                            <WeatherData 
+                                type = {latestDataOfEachType[keyName].type}
+                                value = {latestDataOfEachType[keyName].value}
+                                unit = {latestDataOfEachType[keyName].unit}
+                                time = {latestDataOfEachType[keyName].time}
+                                place = {latestDataOfEachType[keyName].place}
+                                key={i}
+                            />
+                    )
+                })
+            }
+        </div>
+        <div> 
+            <p> Minimum temperature recorded within the selected date interval:</p>
+            <WeatherData
+             type = {this.state.minimumTemperatureData.type}
+             value = {this.state.minimumTemperatureData.value}
+             unit = {this.state.minimumTemperatureData.unit}
+             time = {this.state.minimumTemperatureData.time}
+             place = {this.state.minimumTemperatureData.place}
+            />
+
+        </div>
+        <div> 
+            <p> Maximum temperature recorded within the selected date interval:</p>
+            <WeatherData
+             type = {this.state.maximumTemperatureData.type}
+             value = {this.state.maximumTemperatureData.value}
+             unit = {this.state.maximumTemperatureData.unit}
+             time = {this.state.maximumTemperatureData.time}
+             place = {this.state.maximumTemperatureData.place}
+            />
+        </div>
+            <p> Total precipitation within the selected date interval: {this.state.totalPrecipitation}</p>
+        <div> 
+        </div>
+            <p> Average wind speed within the selected date interval: {this.state.averageWindSpeed}</p>
+        <div> 
+        </div>
+            <p> Average cloud coverage within the selected date interval: {this.state.averageCloudCoverage}</p>
+        <div> 
+        </div>
+            <p> Dominant wind direction within the selected date interval: {this.state.dominantWindDirection}</p>
+        <div> 
+        </div>
+            <p> Hourly temperature prediction within the selected date interval:</p>
+            {
+                Object.keys(weatherPredictions).map((keyName, i) =>{
+                    return (
+                            <WeatherData 
+                                type = {weatherPredictions[keyName].type}
+                                value = {weatherPredictions[keyName].value}
+                                unit = {weatherPredictions[keyName].unit}
+                                time = {weatherPredictions[keyName].time}
+                                place = {weatherPredictions[keyName].place}
+                                key={i}
+                            />
+                    )
+                })
+            }
+        <div> 
         </div>
         
       </header>
@@ -80,43 +146,49 @@ render() {
 }
 
 handleCitySelected(val){
-this.setState({
+/*this.setState({
     selectedCity: val.target.value
-  });
+  });*/
+  this.loadData(this.state.startDate,this.state.endDate,val.target.value);
 }
 handleStartDateChange = date => {
-    this.setState({
+    /*this.setState({
       startDate: date
-    });
+    });*/
+    this.loadData(date,this.state.endDate,this.state.selectedCity);
+    //this.loadData();
   };
   handleEndDateChange = date => {
-    this.setState({
+    /*this.setState({
       endDate: date
-    });
+    });*/
+    this.loadData(this.state.startDate,date,this.state.selectedCity);
+    //this.loadData();
   };
 
-  async loadData() {
+async loadData(startDate = this.state.startDate, endDate = this.state.endDate, selectedCity = this.state.selectedCity) {
     
-    let cityName = this.state.selectedCity
-    let fromDate = this.state.startDate;
-    let toDate = this.state.endDate;
+    let cityName = selectedCity
+    let fromDate = startDate;
+    let toDate = endDate;
 
     let dataUrl = weatherDataUrl + cityName
     let forecastUrl = weatherForecastUrl + cityName
 
-    let res = await getData(dataUrl);
-    let weatherData = await res.json();
+    let weatherData = await getData(dataUrl).then(res => res.json());
+    let weatherForecastData = await getData(forecastUrl).then(res => res.json());
     console.log(weatherData)
-    //console.log(weatherData.find(wd => is(wd, "precipitation")))
 
     let latestWeatherData = getLatestDataOfEachType(fromDate,toDate,weatherData);
-    let minTempData = getMinTemperature(fromDate,toDate,weatherData);
-    let maxTempData = getMaxTemperature(fromDate,toDate,weatherData);
+    let minTempData = getMinTemperature(fromDate,toDate,weatherData).minTemperature;
+    let maxTempData = getMaxTemperature(fromDate,toDate,weatherData).maxTemperature;
     let totalPrec = getTotalPrecipitation(fromDate,toDate,weatherData);
     let avgWindSpeed = getAverageWindSpeed(fromDate,toDate,weatherData);
     let avgCloudCoverage = getAverageCloudCoverage(fromDate,toDate,weatherData);
     let newDominantWindDirection = getDominantWindDirection(fromDate,toDate,weatherData);
-    let newWeatherPredictions = getWeatherForecastData(fromDate,toDate,weatherData);
+    let newWeatherPredictions = getWeatherForecastData(fromDate,toDate,weatherForecastData);
+
+    console.log(newWeatherPredictions)
 
     this.setState({
         latestDataOfEachType : latestWeatherData,
@@ -126,11 +198,13 @@ handleStartDateChange = date => {
         averageWindSpeed: avgWindSpeed,
         averageCloudCoverage: avgCloudCoverage,
         dominantWindDirection: newDominantWindDirection,
-        weatherPredictions: newWeatherPredictions
+        weatherPredictions: newWeatherPredictions,
+        startDate,
+        endDate,
+        selectedCity
       });
 
-      console.log(this.state.latestDataOfEachType)
-      console.log(this.state.latestDataOfEachType.latestPrecipitation)
+      
   }
 
   initializeDates(){
@@ -141,7 +215,6 @@ handleStartDateChange = date => {
   }
   mapWeatherDataObjects(data){
     Object.keys(data).map((keyName, i) =>{
-        console.log(data[keyName].type)
         return (
             <li className="weatherData" key={i}>
                 <WeatherData 
@@ -153,27 +226,44 @@ handleStartDateChange = date => {
                     key={i}
                 />
             </li>
-               
-            
-            /*<li className="weatherData" key={i}>
-                <span className="input-label">key: {i} Name: {data[keyName]}</span>
-            </li>*/
         )
-    } )
-    /*return (
-    <div>
-        {data.map(weatherData => 
-            <WeatherData 
-            type = {weatherData.type}
-            value = {weatherData.value}
-            unit = {weatherData.unit}
-            time = {weatherData.time}
-            place = {weatherData.place}
-            />
-        )}
-    </div>
-    )*/
+    })
   }
+
+  onCreateReportClicked = () => {
+    var type = prompt("Please enter weather data type");
+    var time = prompt("Please enter weather data time");
+    var place = prompt("Please enter weather data place");
+    var value = prompt("Please enter weather data value");
+    var unit = prompt("Please enter weather data unit");
+    
+    let newWeatherReport = 
+    [{
+        type,
+        time,
+        place,
+        value,
+        unit
+    }]
+  
+    //console.log(newWeatherReport)
+
+    const headers = { "Content-Type": "application/json", Accept: "application/json" }
+
+    fetch("http://localhost:8080/data/", {
+        method:'POST',
+        mode: 'cors',
+        credentials: 'same-origin',
+        headers: headers,
+            body: newWeatherReport
+            })
+
+    /*postData("http://localhost:8080/data/", newWeatherReport/*, { headers })
+         .then(() => this.loadData()) // Refresh data bindings after new weather data is added*/
+  }
+
 }
 
 export default WeatherDataContainer;
+
+
