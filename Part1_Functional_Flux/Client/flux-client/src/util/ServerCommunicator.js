@@ -1,7 +1,9 @@
-const weatherDataUrl = 'http://localhost:9090/data/'
-const weatherForecastUrl = 'http://localhost:9090/forecast/'
+const weatherDataUrl = 'http://localhost:8080/data/'
+const weatherForecastUrl = 'http://localhost:8080/forecast/'
 
-async const getWeatherData = await fetch(weatherDataUrl)
-async const  getWeatherPredictionData = await fetch(weatherForecastUrl)
+async function getData(url){
+    return await fetch(url);
+} 
 
-export {getWeatherData,getWeatherPredictionData}
+
+export {getData,weatherDataUrl,weatherForecastUrl}
