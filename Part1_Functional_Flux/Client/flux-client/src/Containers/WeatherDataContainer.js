@@ -140,6 +140,25 @@ handleStartDateChange = date => {
     })
   }
   mapWeatherDataObjects(data){
+    Object.keys(data).map((keyName, i) =>{
+        return (
+            <li className="weatherData" key={i}>
+                <WeatherData 
+                    type = {data[keyName].type}
+                    value = {data[keyName].value}
+                    unit = {data[keyName].unit}
+                    time = {data[keyName].time}
+                    place = {data[keyName].place}
+                    key={i}
+                />
+            </li>
+               
+            
+            /*<li className="weatherData" key={i}>
+                <span className="input-label">key: {i} Name: {data[keyName]}</span>
+            </li>*/
+        )
+    } )
     /*return (
     <div>
         {data.map(weatherData => 
