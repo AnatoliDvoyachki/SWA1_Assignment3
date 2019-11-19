@@ -13,7 +13,6 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
       // On city selection changed event handler
       $scope.onCitySelectionChanged = () => loadData(aModel, $scope, $http)
       
-
       // On reload data button click event handler
       $scope.onReloadDataClicked = () => {
           loadData(aModel, $scope, $http)
@@ -23,14 +22,13 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
       // On date picker value changed event handler
       $scope.onDateChanged = () => loadData(aModel, $scope, $http)
       
-
       // On create report click event handler
       $scope.onCreateReportClicked = () => {
-          var type = prompt("Please enter weather data type");
-          var time = prompt("Please enter weather data time");
-          var place = prompt("Please enter weather data place");
-          var value = prompt("Please enter weather data value");
-          var unit = prompt("Please enter weather data unit");
+          let type = prompt("Please enter weather data type");
+          let time = prompt("Please enter weather data time");
+          let place = prompt("Please enter weather data place");
+          let value = prompt("Please enter weather data value");
+          let unit = prompt("Please enter weather data unit");
           
           let newWeatherReport = 
           [{
@@ -44,6 +42,7 @@ module.controller('WeatherDataController', function($scope, $model, $http) {
           const headers = { "Content-Type": "application/json", Accept: "application/json" }
           $http.post("http://localhost:8080/data/", newWeatherReport, { headers })
                .then(() => loadData(aModel, $scope, $http)) // Refresh data bindings after new weather data is added
+               .catch(console.error)  
       }
 })
 
