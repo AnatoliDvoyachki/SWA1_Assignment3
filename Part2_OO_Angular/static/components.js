@@ -60,7 +60,7 @@ function loadData(aModel, $scope, $http) {
       
       const toDate = $scope.toDate != null 
                        ? new Date($scope.toDate)
-                       : getCurrentDate() // Default date is now
+                       : new Date() // Default date is now
 
       weatherDataUrl += cityName
       weatherForecastUrl += cityName
@@ -88,8 +88,4 @@ function getDate5DaysAgo() {
     var myDate = new Date();
     myDate.setTime(myDate.getTime() - dateOffset);
     return myDate
-}
-
-function getCurrentDate() {
-    return new Date()
 }

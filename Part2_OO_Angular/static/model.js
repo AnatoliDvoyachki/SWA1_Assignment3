@@ -27,7 +27,7 @@ const model = (weatherData, forecastData) => {
     function getMinTemperature(fromDate, toDate) {
         let temperatureValues = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
         
-        if (temperatureValues.length == 0) {
+        if (temperatureValues.length === 0) {
             return {  }
         }
 
@@ -44,7 +44,7 @@ const model = (weatherData, forecastData) => {
     function getMaxTemperature(fromDate, toDate) {
         let temperatures = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
         
-        if (temperatures.length == 0) {
+        if (temperatures.length === 0) {
             return { }
         }
 
@@ -62,7 +62,7 @@ const model = (weatherData, forecastData) => {
         let precipitationValues = weatherData.filter(wd => is(wd, "precipitation") && intervalOverlaps(wd, fromDate, toDate))
                                              .map(wd => wd["value"])
 
-        if (precipitationValues.length == 0) {
+        if (precipitationValues.length === 0) {
             return ""
         }
 
@@ -74,7 +74,7 @@ const model = (weatherData, forecastData) => {
         let windSpeedValues = weatherData.filter(wd => is(wd, "wind speed") && intervalOverlaps(wd, fromDate, toDate))
                                          .map(wd => wd["value"])
                        
-        if (windSpeedValues.length == 0) {
+        if (windSpeedValues.length === 0) {
             return ""
         }
 
@@ -87,7 +87,7 @@ const model = (weatherData, forecastData) => {
         let cloudCoverageValues = weatherData.filter(wd => is(wd, "cloud coverage") && intervalOverlaps(wd, fromDate, toDate))
                                              .map(wd => wd["value"])
              
-        if (cloudCoverageValues.length == 0) {
+        if (cloudCoverageValues.length === 0) {
             return ""
         }
 
@@ -106,7 +106,7 @@ const model = (weatherData, forecastData) => {
     }
 
     function getHighestOccuringElement(weatherDataArray) {
-        if (weatherDataArray.length == 0) {
+        if (weatherDataArray.length === 0) {
             return null;
         }
 
@@ -136,7 +136,7 @@ const model = (weatherData, forecastData) => {
     }
 
     function is(weatherData, type) {
-        return weatherData["type"] == type
+        return weatherData["type"] === type
     } 
 
     return { getLatestDataOfEachType, getMinTemperature, getMaxTemperature, 
