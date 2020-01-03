@@ -12,22 +12,31 @@ const mapStateToProps = state => {
     }
   }
 
-let SelectDate = ({ startDate, endDate ,dispatch }) => {
+let SelectDate = ({ startDate, endDate, dispatch }) => {
+  
     return (
       <div>
           <p>Select time interval:</p>
             <p> Start Date: </p>
             <DatePicker
                 selected={startDate}
-                onChange={e => dispatch(selectStartDate(e.value))}/>
+                onChange={e => startDateSelected(e,dispatch)}/>
             <p> End Date: </p>
             <DatePicker
                 selected={endDate}
-                onChange={e => dispatch(selectEndDate(e.value))}/>
+                onChange={e => endDateSelected(e,dispatch)}/>
         </div>
   )
 
   
+}
+
+const startDateSelected = (date,dispatch) => {
+  dispatch(selectStartDate(date))
+}
+
+const endDateSelected = (date,dispatch) => {
+  dispatch(selectEndDate(date))
 }
 
 
