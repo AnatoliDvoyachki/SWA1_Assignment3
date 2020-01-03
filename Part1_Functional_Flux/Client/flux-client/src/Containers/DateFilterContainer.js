@@ -5,12 +5,7 @@ import PropTypes from 'prop-types'
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-const mapStateToProps = state => {
-    return {
-      startDate: state.startDate,
-      endDate: state.endDate
-    }
-  }
+
 
 let SelectDate = ({ startDate, endDate, dispatch }) => {
   
@@ -39,6 +34,12 @@ const endDateSelected = (date,dispatch) => {
   dispatch(selectEndDate(date))
 }
 
+const mapStateToProps = state => {
+  return {
+    startDate: state.startDate,
+    endDate: state.endDate
+  }
+}
 
 
 SelectDate = connect(mapStateToProps)(SelectDate)

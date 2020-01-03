@@ -5,7 +5,7 @@ import WeatherDataPrediction from '../Components/WeatherPredictionData'
 
 import { getLatestDataOfEachType,getMinTemperature,
   getMaxTemperature,getTotalPrecipitation,getAverageWindSpeed,
-  getAverageCloudCoverage,getDominantWindDirection} from '../util/WeatherDataHelpers';
+  getAverageCloudCoverage,getDominantWindDirection,getWeatherForecastData} from '../util/WeatherDataHelpers';
 
 
 
@@ -60,7 +60,7 @@ render() {
 }
 
 renderWeatherPredictions(){
-  let forecastData = this.props.forecastData;
+  let forecastData = getWeatherForecastData(this.props.startDate,this.props.endDate,this.props.forecastData) ;
   if(forecastData){
     return Object.keys(forecastData).map((keyName, i) =>{
       return (
