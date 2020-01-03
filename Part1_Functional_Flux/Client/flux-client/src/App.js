@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { fetchForecastData, fetchWeatherData } from './State/actions'
 import CreateDataContainer from './Containers/CreateDataContainer'
 import RefreshDataContainer from './Containers/RefreshDataContainer'
+import DatePickerContainer from './Containers/DateFilterContainer'
 
 class App extends React.Component{
 
@@ -21,6 +22,7 @@ class App extends React.Component{
       <RefreshDataContainer selectedCity= {this.props.selectedCity} />
         <SelectCity/>
         <CreateDataContainer/>
+        <DatePickerContainer startDate = {this.props.startDate} endDate = {this.props.endDate}/>
         {this.props.weatherData ? (<WeatherDataContainer startDate = {this.props.startDate} endDate = {this.props.endDate} weatherData = {this.props.weatherData} />)
          : (<div> </div>)}
         
