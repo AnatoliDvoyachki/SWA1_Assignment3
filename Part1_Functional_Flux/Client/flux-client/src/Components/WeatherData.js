@@ -1,19 +1,6 @@
 import React from 'react';
 
 class WeatherData extends React.Component {
-
-
-  constructor(props) {
-    super(props);
-    this.state = {
-        type: "",
-        value: "",
-        unit: "",
-        time: "",
-        place: "",
-    };
-  }
-
     render() {
       
       return (

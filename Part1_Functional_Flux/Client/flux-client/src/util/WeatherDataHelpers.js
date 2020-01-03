@@ -1,4 +1,6 @@
 function getLatestDataOfEachType(fromDate, toDate,weatherData) {
+
+    if(weatherData === undefined) return null
     // First as baseline
     let latestPrecipitation = weatherData.find(wd => is(wd, "precipitation"))
     let latestTemperature = weatherData.find(wd => is(wd, "temperature"))
@@ -23,8 +25,9 @@ function getLatestDataOfEachType(fromDate, toDate,weatherData) {
 }
 
 function getMinTemperature(fromDate, toDate,weatherData) {
+
     let temperatureValues = weatherData.filter(wd => is(wd, "temperature") && intervalOverlaps(wd, fromDate, toDate))
-    
+
     if (temperatureValues.length === 0) {
         return {  }
     }
@@ -36,7 +39,8 @@ function getMinTemperature(fromDate, toDate,weatherData) {
         return t1 < t2 ? pre : cur
     })
 
-    return { minTemperature }
+    console.log("Returned minimum tempereature: " + minTemperature)
+    return minTemperature
 }
 
 function getMaxTemperature(fromDate, toDate,weatherData) {
@@ -53,7 +57,8 @@ function getMaxTemperature(fromDate, toDate,weatherData) {
         return t1 > t2 ? pre : cur
     })
 
-    return { maxTemperature }
+    console.log("Returned maximum tempereature: " + maxTemperature)
+    return maxTemperature
 }
 
 function getTotalPrecipitation(fromDate, toDate,weatherData) {
