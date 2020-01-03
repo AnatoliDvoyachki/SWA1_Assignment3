@@ -86,13 +86,12 @@ renderMaximumTemperatureData(){
   return (
     <div>
       <WeatherData
-            
-             type = {maximumTemperatureData.type}
-             value = {maximumTemperatureData.value}
-             unit = {maximumTemperatureData.unit}
-             time = {maximumTemperatureData.time}
-             place = {maximumTemperatureData.place}
-            />
+        type = {maximumTemperatureData.type}
+        value = {maximumTemperatureData.value}
+        unit = {maximumTemperatureData.unit}
+        time = {maximumTemperatureData.time}
+        place = {maximumTemperatureData.place}
+      />
     </div>
   )
 }

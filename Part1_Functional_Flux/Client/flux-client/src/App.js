@@ -4,6 +4,8 @@ import WeatherDataContainer from './Containers/WeatherDataContainer';
 import SelectCity from './Containers/SelectCity'
 import { connect } from 'react-redux'
 import { fetchForecastData, fetchWeatherData } from './State/actions'
+import CreateDataContainer from './Containers/CreateDataContainer'
+import RefreshDataContainer from './Containers/RefreshDataContainer'
 
 class App extends React.Component{
 
@@ -16,7 +18,9 @@ class App extends React.Component{
     
     return (
       <div className="App">
+      <RefreshDataContainer selectedCity= {this.props.selectedCity} />
         <SelectCity/>
+        <CreateDataContainer/>
         {this.props.weatherData ? (<WeatherDataContainer startDate = {this.props.startDate} endDate = {this.props.endDate} weatherData = {this.props.weatherData} />)
          : (<div> </div>)}
         
@@ -27,7 +31,7 @@ class App extends React.Component{
 }
 
 const mapStatetoProps = (state) => {
-  return { weatherData: state.weatherData.weatherData, startDate: state.weatherData.startDate, endDate: state.weatherData.endDate }
+  return { weatherData: state.weatherData.weatherData, startDate: state.weatherData.startDate, endDate: state.weatherData.endDate, selectedCity: state.weatherData.selectedCity }
 }
 const mapDispatchprops = (dispatch) => {
   return { onFetchData: () => { 
