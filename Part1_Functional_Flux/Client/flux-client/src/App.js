@@ -23,7 +23,12 @@ class App extends React.Component{
         <SelectCity/>
         <CreateDataContainer/>
         <DatePickerContainer startDate = {this.props.startDate} endDate = {this.props.endDate}/>
-        {this.props.weatherData ? (<WeatherDataContainer startDate = {this.props.startDate} endDate = {this.props.endDate} weatherData = {this.props.weatherData} />)
+        {this.props.weatherData ? (<WeatherDataContainer 
+          startDate = {this.props.startDate} 
+          endDate = {this.props.endDate}
+           weatherData = {this.props.weatherData} 
+           forecastData={this.props.forecastData} 
+           />)
          : (<div> </div>)}
         
       </div>
@@ -33,7 +38,7 @@ class App extends React.Component{
 }
 
 const mapStatetoProps = (state) => {
-  return { weatherData: state.weatherData.weatherData, startDate: state.weatherData.startDate, endDate: state.weatherData.endDate, selectedCity: state.weatherData.selectedCity }
+  return { forecastData: state.weatherData.forecastData, weatherData: state.weatherData.weatherData, startDate: state.weatherData.startDate, endDate: state.weatherData.endDate, selectedCity: state.weatherData.selectedCity }
 }
 const mapDispatchprops = (dispatch) => {
   return { onFetchData: () => { 
