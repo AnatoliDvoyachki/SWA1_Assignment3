@@ -61,20 +61,23 @@ render() {
 
 renderWeatherPredictions(){
   let forecastData = this.props.forecastData;
-  return Object.keys(forecastData).map((keyName, i) =>{
-    return (
-            <WeatherDataPrediction 
-
-                from = {forecastData[keyName].from}
-                to = {forecastData[keyName].to}
-                type = {forecastData[keyName].type}
-                unit = {forecastData[keyName].unit}
-                time = {forecastData[keyName].time}
-                place = {forecastData[keyName].place}
-                key={i}
-            />
-    )
-})
+  if(forecastData){
+    return Object.keys(forecastData).map((keyName, i) =>{
+      return (
+              <WeatherDataPrediction 
+  
+                  from = {forecastData[keyName].from}
+                  to = {forecastData[keyName].to}
+                  type = {forecastData[keyName].type}
+                  unit = {forecastData[keyName].unit}
+                  time = {forecastData[keyName].time}
+                  place = {forecastData[keyName].place}
+                  key={i}
+              />
+      )
+  })
+  }
+  
 }
 
 renderMinimumTemperatureData(){
