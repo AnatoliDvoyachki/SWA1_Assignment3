@@ -1,4 +1,4 @@
-<html ng-app='weatherDataApp'>
+<html ng-app="weatherDataApp">
 <head> 
     <title>Weather data</title>
     <style>
@@ -28,9 +28,9 @@
     <button id="reloadDataButton" ng-click="onReloadDataClicked()">Reload Data</button>
     <button id="createReportButton" ng-click="onCreateReportClicked()">Create Data</button>
     
-    <div id='latest_data_div'>
+    <div id="latest_data_div">
         <h1>Latest weather data from each type within the selected date interval:</h1>
-        <table id='latest_data_table'>
+        <table id="latest_data_table">
             <thead>
                 <tr>
                     <td>Type</td>
@@ -39,21 +39,21 @@
                     <td>Time</td>
                     <td>Place</td>
                 </tr>
-                <tr ng-repeat="wd in model.latestDataOfEachType">
-                    <td>{{wd.type}}</td>
-                    <td>{{wd.value}}</td>
-                    <td>{{wd.unit}}</td>
-                    <td>{{wd.time}}</td>
-                    <td>{{wd.place}}</td>
+                <tr ng-repeat="weatherData in model.latestDataOfEachType">
+                    <td>{{weatherData.type}}</td>
+                    <td>{{weatherData.value}}</td>
+                    <td>{{weatherData.unit}}</td>
+                    <td>{{weatherData.time}}</td>
+                    <td>{{weatherData.place}}</td>
                 </tr>
             </thead>
-            <tbody id='latest_data_data'></tbody>
+            <tbody id="latest_data_data"></tbody>
         </table>
     </div>    
 
-    <div id='min_temperature_div'>
+    <div id="min_temperature_div">
         <h1>Minimum temperature recorded within the selected date interval:</h1>
-            <table id='min_temperature_table'>
+            <table id="min_temperature_table">
                 <thead>
                     <tr>
                         <td>Type</td>
@@ -62,21 +62,21 @@
                         <td>Time</td>
                         <td>Place</td>
                     </tr>
-                    <tr ng-repeat="wd in model.minimumTemperatureData">
-                        <td>{{wd.type}}</td>
-                        <td>{{wd.value}}</td>
-                        <td>{{wd.unit}}</td>
-                        <td>{{wd.time}}</td>
-                        <td>{{wd.place}}</td>
+                    <tr ng-repeat="weatherData in model.minimumTemperatureData">
+                        <td>{{weatherData.type}}</td>
+                        <td>{{weatherData.value}}</td>
+                        <td>{{weatherData.unit}}</td>
+                        <td>{{weatherData.time}}</td>
+                        <td>{{weatherData.place}}</td>
                     </tr>
                 </thead>
-                <tbody id='min_temperature_data'></tbody>
+                <tbody id="min_temperature_data"></tbody>
             </table>
    </div>    
 
-   <div id='max_temperature_div'>
+   <div id="max_temperature_div">
             <h1>Maximum temperature recorded within the selected date interval:</h1>
-            <table id='max_temperature_table'>
+            <table id="max_temperature_table">
                 <thead>
                     <tr>
                         <td>Type</td>
@@ -85,28 +85,28 @@
                         <td>Time</td>
                         <td>Place</td>
                     </tr>
-                    <tr ng-repeat="wd in model.maximumTemperatureData">
-                        <td>{{wd.type}}</td>
-                        <td>{{wd.value}}</td>
-                        <td>{{wd.unit}}</td>
-                        <td>{{wd.time}}</td>
-                        <td>{{wd.place}}</td>
+                    <tr ng-repeat="weatherData in model.maximumTemperatureData">
+                        <td>{{weatherData.type}}</td>
+                        <td>{{weatherData.value}}</td>
+                        <td>{{weatherData.unit}}</td>
+                        <td>{{weatherData.time}}</td>
+                        <td>{{weatherData.place}}</td>
                     </tr>
                 </thead>
-                <tbody id='max_temperature_data'></tbody>
+                <tbody id="max_temperature_data"></tbody>
             </table>
     </div>    
 
-    <div id = 'base'>
+    <div id = "base">
         <h1 id="totalPrecipitation">Total precipitation within the selected date interval: {{model.totalPrecipitation}} mm</h1>
         <h1 id="averageWindSpeed">Average wind speed within the selected date interval: {{model.averageWindSpeed}} m/s</h1>
         <h1 id="averageCloudCoverage">Average cloud coverage within the selected date interval: {{model.averageCloudCoverage}} %</h1>
         <h1 id="dominantWindDirection">Dominant wind direction within the selected date interval: {{model.dominantWindDirection}}</h1>
     </div>
     
-    <div id='hourly_predictions'>
+    <div id="hourly_predictions">
         <h1>Hourly temperature predictions within the selected date interval:</h1>
-        <table id='hourly_predictions_table'>
+        <table id="hourly_predictions_table">
             <thead>
                 <tr>
                     <td>From</td>
@@ -116,24 +116,24 @@
                     <td>Time</td>
                     <td>Place</td>
                 </tr>
-                <tr ng-repeat="hp in model.weatherPredictions">
-                    <td>{{hp.from}}</td>
-                    <td>{{hp.to}}</td>
-                    <td>{{hp.type}}</td>
-                    <td>{{hp.unit}}</td>
-                    <td>{{hp.time}}</td>
-                    <td>{{hp.place}}</td>
+                <tr ng-repeat="weatherPrediction in model.weatherPredictions">
+                    <td>{{weatherPrediction.from}}</td>
+                    <td>{{weatherPrediction.to}}</td>
+                    <td>{{weatherPrediction.type}}</td>
+                    <td>{{weatherPrediction.unit}}</td>
+                    <td>{{weatherPrediction.time}}</td>
+                    <td>{{weatherPrediction.place}}</td>
                 </tr>
             </thead>
-            <tbody id='hourly_predictions_data'></tbody>
+            <tbody id="hourly_predictions_data"></tbody>
         </table>
     </div>
 
 </body>
 
-<script type = 'module'>
-        import 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js'
-        import './components.js'
+<script type = "module">
+        import "https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"
+        import "./components.js"
 </script>
 
 </html>
