@@ -1,18 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { fetchForecastData, fetchWeatherData } from '../State/actions'
+import React from "react"
+import { connect } from "react-redux"
+import { fetchForecastData, fetchWeatherData } from "../State/actions"
 
-let RefreshDataContainer = ({ selectedCity,dispatch }) => {
-    
-  
+let RefreshDataContainer = ({ selectedCity, dispatch }) => {
     return (
     <div>
-     <button onClick={e => handleClick(selectedCity,dispatch)}></button>
+     <button onClick={e => handleClick(selectedCity, dispatch)}>Reload data</button>
     </div>
   )
-
-
-  
 }
 const handleClick = (selectedCity,dispatch) => {
   console.log("Refreshing data...")
@@ -27,4 +22,3 @@ const mapStateToProps = state => {
 
 RefreshDataContainer = connect(mapStateToProps)(RefreshDataContainer)
 export default RefreshDataContainer
-

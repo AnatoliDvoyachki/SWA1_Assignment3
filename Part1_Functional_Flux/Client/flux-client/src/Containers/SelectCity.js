@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectCity } from '../State/actions'
 
-
 const mapStateToProps = state => {
     return {
       selectedCity: state.selectedCity
@@ -10,8 +9,6 @@ const mapStateToProps = state => {
   }
 
 let SelectCity = ({ selectedCity,dispatch }) => {
-    
-  
     return (
     <div>
      <select value = {selectedCity} onChange={(e) => dispatch(selectCity(e.target.value))}>
@@ -21,12 +18,8 @@ let SelectCity = ({ selectedCity,dispatch }) => {
         <option value="Copenhagen">Copenhagen</option>
      </select>
     </div>
-  )
-
-  
+  )  
 }
-
 
 SelectCity = connect(mapStateToProps)(SelectCity)
 export default SelectCity
-

@@ -1,13 +1,9 @@
-import React from 'react';
-import WeatherData from '../Components/WeatherData';
-import WeatherDataPrediction from '../Components/WeatherPredictionData'
-
-
+import React from "react";
+import WeatherData from "../Components/WeatherData";
+import WeatherDataPrediction from "../Components/WeatherPredictionData"
 import { getLatestDataOfEachType,getMinTemperature,
   getMaxTemperature,getTotalPrecipitation,getAverageWindSpeed,
-  getAverageCloudCoverage,getDominantWindDirection,getWeatherForecastData} from '../util/WeatherDataHelpers';
-
-
+  getAverageCloudCoverage,getDominantWindDirection,getWeatherForecastData} from "../util/WeatherDataHelpers";
 
 class WeatherDataContainer extends React.Component{
 render() {
@@ -19,37 +15,30 @@ render() {
           <p>Latest Weather Data:</p>
             {this.renderDataForEachType()}
         </div>
-
         <div> 
             <p> Minimum temperature recorded within the selected date interval:</p>
             {this.renderMinimumTemperatureData()}
         </div>
-
         <div> 
             <p> Maximum temperature recorded within the selected date interval:</p>
             {this.renderMaximumTemperatureData()}
         </div>
-
         <div> 
         <p> Total precipitation within the selected date interval:
            {getTotalPrecipitation(this.props.startDate,this.props.endDate,this.props.weatherData)}</p>
         </div>
-
         <div> 
             <p> Average wind speed within the selected date interval: 
               {getAverageWindSpeed(this.props.startDate,this.props.endDate,this.props.weatherData)}</p>
         </div>
-
         <div>
             <p> Average cloud coverage within the selected date interval:
                {getAverageCloudCoverage(this.props.startDate,this.props.endDate,this.props.weatherData)}</p> 
         </div>
-
         <div>
             <p> Dominant wind direction within the selected date interval:
                {getDominantWindDirection(this.props.startDate,this.props.endDate,this.props.weatherData)}</p> 
         </div>
-
         <div>
             <p> Hourly temperature prediction within the selected date interval:</p>
             {this.renderWeatherPredictions()}

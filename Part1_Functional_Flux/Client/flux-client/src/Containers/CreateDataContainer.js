@@ -1,11 +1,9 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { createData, selectCity } from '../State/actions'
+import React from "react"
+import { connect } from "react-redux"
+import { createData } from "../State/actions"
 
 
 let CreateData = ({ selectedCity,dispatch }) => {
-    
-  
     return (
     <div>
       <button onClick={e => onCreateReportClicked(selectedCity, dispatch)}>Create Data</button>

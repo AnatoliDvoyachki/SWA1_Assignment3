@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { selectCity } from '../State/actions'
-import PropTypes from 'prop-types'
 
-//      prop:   weatherPredictions: []
 const mapStateToProps = state => {
     return {
       selectedCity: state.selectedCity
@@ -11,8 +9,6 @@ const mapStateToProps = state => {
   }
 
 let SelectCity = ({ selectedCity,dispatch }) => {
-    
-  
     return (
     <div>
      <select value = {selectedCity} onChange={(e) => dispatch(selectCity(e.target.value))}>
@@ -23,8 +19,6 @@ let SelectCity = ({ selectedCity,dispatch }) => {
      </select>
     </div>
   )
-
-  
 }
 
 const onCreateReportClicked = () => {
@@ -42,8 +36,6 @@ const onCreateReportClicked = () => {
         value,
         unit
     }]
-
-    
   }
 SelectCity = connect(mapStateToProps)(SelectCity)
 export default SelectCity

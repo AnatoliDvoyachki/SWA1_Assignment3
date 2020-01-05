@@ -1,4 +1,4 @@
-import { getData,weatherDataUrl, weatherForecastUrl } from '../util/ServerCommunicator';
+import { getData, weatherDataUrl, weatherForecastUrl } from '../util/ServerCommunicator';
 
 export const CREATE_DATA = 'CREATE_DATA'
 export const REFRESH_DATA = 'REFRESH_DATA'
@@ -8,7 +8,6 @@ export const SELECT_END_DATE = 'SELECT_END_DATE'
 export const FETCH_WEATHER_DATA = 'FETCH_WEATHER_DATA'
 export const FETCH_FORECAST_DATA = 'FETCH_FORECAST_DATA'
 export const ERROR = 'ERROR'
-
 
 export function createData(newWeatherReport,selectedCity) {
 
@@ -38,11 +37,9 @@ export function selectCity(city) {
   return (dispatch) => {
     return getData(dataUrl)
         .then(response => response.json())
-        .then(json => dispatch(
-            { type: SELECT_CITY, city, weatherData: json }))
+        .then(json => dispatch({ type: SELECT_CITY, city, weatherData: json }))
         .catch(err => console.log("ERROR: " + err))
   }
-
 }
 
 export function selectStartDate(startDate) {
@@ -53,7 +50,6 @@ export function selectEndDate(endDate) {
     return { type: SELECT_END_DATE, endDate }
 }
 
-// asynchronous action creator
 export const fetchWeatherData = (selectedCity = "Horsens") => {
   let dataUrl = weatherDataUrl + selectedCity
   
@@ -64,7 +60,6 @@ export const fetchWeatherData = (selectedCity = "Horsens") => {
                       .then( json => dispatch({ type: FETCH_WEATHER_DATA, weatherData: json })) 
 }
 
-// asynchronous action creator
 export const fetchForecastData = (selectedCity = "Horsens") => {
   let forecastUrl = weatherForecastUrl + selectedCity
   
@@ -74,18 +69,3 @@ export const fetchForecastData = (selectedCity = "Horsens") => {
                       .then(res => res.json())
                       .then(json => dispatch({ type: FETCH_FORECAST_DATA, forecastData: json })) 
 }
-/*
-export const fetchData = (selectedCity = "Horsens") => {
-
-  let dataUrl = weatherDataUrl + selectedCity
-  let forecastUrl = weatherForecastUrl + selectedCity
-  
-  let weatherData = getData(dataUrl).then(res => res.json());
-  let forecastData = getData(forecastUrl).then(res => res.json());
-
-  console.log("Fetching data...");
-
-  return (dispatch) => getData(dataUrl)
-                      .then(dispatch({ type: FETCH_DATA, weatherData,forecastData })) 
-}
-*/
