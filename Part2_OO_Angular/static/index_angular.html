@@ -33,11 +33,11 @@
         <table id="latest_data_table">
             <thead>
                 <tr>
-                    <td>Type</td>
-                    <td>Value</td>
-                    <td>Unit</td>
-                    <td>Time</td>
-                    <td>Place</td>
+                    <td><b>Type</b></td>
+                    <td><b>Value</b></td>
+                    <td><b>Unit</b></td>
+                    <td><b>Time</b></td>
+                    <td><b>Place</b></td>
                 </tr>
                 <tr ng-repeat="weatherData in model.latestDataOfEachType">
                     <td>{{weatherData.type}}</td>
@@ -56,11 +56,11 @@
             <table id="min_temperature_table">
                 <thead>
                     <tr>
-                        <td>Type</td>
-                        <td>Value</td>
-                        <td>Unit</td>
-                        <td>Time</td>
-                        <td>Place</td>
+                        <td><b>Type</b></td>
+                        <td><b>Value</b></td>
+                        <td><b>Unit</b></td>
+                        <td><b>Time</b></td>
+                        <td><b>Place</b></td>
                     </tr>
                     <tr ng-repeat="weatherData in model.minimumTemperatureData">
                         <td>{{weatherData.type}}</td>
@@ -79,11 +79,11 @@
             <table id="max_temperature_table">
                 <thead>
                     <tr>
-                        <td>Type</td>
-                        <td>Value</td>
-                        <td>Unit</td>
-                        <td>Time</td>
-                        <td>Place</td>
+                        <td><b>Type</b></td>
+                        <td><b>Value</b></td>
+                        <td><b>Unit</b></td>
+                        <td><b>Time</b></td>
+                        <td><b>Place</b></td>
                     </tr>
                     <tr ng-repeat="weatherData in model.maximumTemperatureData">
                         <td>{{weatherData.type}}</td>
@@ -109,12 +109,12 @@
         <table id="hourly_predictions_table">
             <thead>
                 <tr>
-                    <td>From</td>
-                    <td>To</td>
-                    <td>Type</td>
-                    <td>Unit</td>
-                    <td>Time</td>
-                    <td>Place</td>
+                    <td><b>From</b></td>
+                    <td><b>To</b></td>
+                    <td><b>Type</b></td>
+                    <td><b>Unit</b></td>
+                    <td><b>Time</b></td>
+                    <td><b>Place</b></td>
                 </tr>
                 <tr ng-repeat="weatherPrediction in model.weatherPredictions">
                     <td>{{weatherPrediction.from}}</td>

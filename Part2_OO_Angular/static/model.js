@@ -7,7 +7,6 @@ const model = (weatherData, forecastData) => {
         let latestWindSpeed = weatherData.find(wd => is(wd, "wind speed"))
         let latestCloudCoverage = weatherData.find(wd => is(wd, "cloud coverage"))
 
-        // Seperate the data
         weatherData.forEach(wd => {
             let overlaps = intervalOverlaps(wd, fromDate, toDate)      
             if (is(wd, "precipitation") && latestPrecipitation.time < wd.time && overlaps) {
@@ -48,7 +47,7 @@ const model = (weatherData, forecastData) => {
             return { }
         }
 
-        let maxTemperature =  temperatures.reduce((pre, cur) => {
+        let maxTemperature = temperatures.reduce((pre, cur) => {
             let t1 = pre["value"]
             let t2 = cur["value"]
 
@@ -105,7 +104,7 @@ const model = (weatherData, forecastData) => {
         return forecastData.filter(forecast => intervalOverlaps(forecast, fromDate, toDate))
     }
 
-    const getHighestOccuringElement = (weatherDataArray) => {
+    const getHighestOccuringElement = weatherDataArray => {
         if (weatherDataArray.length === 0) {
             return null;
         }
