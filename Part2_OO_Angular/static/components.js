@@ -1,12 +1,17 @@
 import model from "./model.js"
 
-const module = angular.module("weatherDataApp", [])
+const module = angular.module("weatherDataApp", []) //Referenced in html
 
 const headers = { "Content-Type": "application/json", Accept: "application/json" }
 
-module.value("$model", { cityNames: ["Aarhus", "Horsens", "Copenhagen"] })
+module.value("$model", { cityNames: ["Aarhus", "Horsens", "Copenhagen"] }) //$model binds cityNames to the model
 
-module.controller("WeatherDataController", ($scope, $model, $http) => {
+//Dependancy injection
+module.controller("WeatherDataController", ($scope, $model, $http) => {      
+    
+    // scope is the ViewModel. Connects JavaScript to HTML
+    // http - dependency injection of http client. allows for http requests
+    
     // Initialize application
     $scope.model = $model
     let aModel

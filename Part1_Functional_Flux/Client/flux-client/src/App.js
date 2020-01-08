@@ -9,8 +9,7 @@ import RefreshDataContainer from './Containers/RefreshDataContainer'
 import DatePickerContainer from './Containers/DateFilterContainer'
 
 class App extends React.Component{
-
-
+  
   componentDidMount() {
     this.props.onFetchData()
   }
