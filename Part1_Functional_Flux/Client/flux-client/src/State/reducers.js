@@ -1,5 +1,4 @@
-import {getDate5DaysAgo,getCurrentDate} from "../util/DateHelpers";
-
+import { getDate5DaysAgo, getCurrentDate } from "../util/DateHelpers";
 import { combineReducers } from "redux"
 import {
     SELECT_CITY,
@@ -17,10 +16,10 @@ const initialState = {
     weatherData: [],
     forecastData: [],
     error: ""
-  }
+}
 
-function weatherData(state = initialState,action){
-    switch(action.type) {
+function weatherData(state = initialState, action){
+    switch (action.type) {
       case FETCH_FORECAST_DATA:
           return { ...state, forecastData: action.forecastData }
       case FETCH_WEATHER_DATA:
@@ -38,8 +37,6 @@ function weatherData(state = initialState,action){
     }
 }
 
-const weatherDataApp = combineReducers({
-  weatherData
-})
+const weatherDataApp = combineReducers({ weatherData })
 
 export default weatherDataApp

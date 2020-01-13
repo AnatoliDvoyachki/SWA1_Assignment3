@@ -1,4 +1,4 @@
-<html ng-app="weatherDataApp">
+<html ng-app="weatherDataApp" ng-controller="WeatherDataController">
 <head> 
     <title>Weather data</title>
     <style>
@@ -13,10 +13,10 @@
         }
     </style>
 </head>
-<body ng-controller="WeatherDataController">
+<body >
     
     <h3>Select city:</h3>
-    <select ng-model="cityName" ng-change="onCitySelectionChanged()" [value]="Aarhus">
+    <select ng-model="cityName" ng-change="onCitySelectionChanged()">
         <option value="Aarhus">Aarhus</option>
         <option value="Copenhagen">Copenhagen</option>
         <option value="Horsens">Horsens</option>
@@ -49,7 +49,7 @@
             </thead>
             <tbody id="latest_data_data"></tbody>
         </table>
-    </div>    
+    </div>
 
     <div id="min_temperature_div">
         <h1>Minimum temperature recorded within the selected date interval:</h1>

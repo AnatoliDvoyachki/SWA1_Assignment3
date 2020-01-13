@@ -5,6 +5,4 @@ function getData(url){
     return fetch(url);
 } 
 
-
-
-export {getData,weatherDataUrl,weatherForecastUrl}
+export { getData, weatherDataUrl, weatherForecastUrl }

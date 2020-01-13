@@ -21,21 +21,5 @@ let SelectCity = ({ selectedCity,dispatch }) => {
   )
 }
 
-const onCreateReportClicked = () => {
-    var type = prompt("Please enter weather data type");
-    var time = prompt("Please enter weather data time");
-    var place = prompt("Please enter weather data place");
-    var value = prompt("Please enter weather data value");
-    var unit = prompt("Please enter weather data unit");
-    
-    let newWeatherReport = 
-    [{
-        type,
-        time,
-        place,
-        value,
-        unit
-    }]
-  }
 SelectCity = connect(mapStateToProps)(SelectCity)
 export default SelectCity

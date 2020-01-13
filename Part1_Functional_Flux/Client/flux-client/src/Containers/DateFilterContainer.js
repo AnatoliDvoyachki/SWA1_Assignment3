@@ -36,4 +36,5 @@ const mapStateToProps = state => {
 }
 
 SelectDate = connect(mapStateToProps)(SelectDate)
+
 export default SelectDate

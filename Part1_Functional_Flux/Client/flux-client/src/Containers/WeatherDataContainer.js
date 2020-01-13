@@ -1,9 +1,9 @@
 import React from "react";
 import WeatherData from "../Components/WeatherData";
 import WeatherDataPrediction from "../Components/WeatherPredictionData"
-import { getLatestDataOfEachType,getMinTemperature,
-  getMaxTemperature,getTotalPrecipitation,getAverageWindSpeed,
-  getAverageCloudCoverage,getDominantWindDirection,getWeatherForecastData} from "../util/WeatherDataHelpers";
+import { getLatestDataOfEachType, getMinTemperature,
+  getMaxTemperature, getTotalPrecipitation, getAverageWindSpeed,
+  getAverageCloudCoverage, getDominantWindDirection, getWeatherForecastData} from "../util/WeatherDataHelpers";
 
 class WeatherDataContainer extends React.Component{
 render() {
@@ -50,11 +50,10 @@ render() {
 
 renderWeatherPredictions(){
   let forecastData = getWeatherForecastData(this.props.startDate,this.props.endDate,this.props.forecastData) ;
-  if(forecastData){
-    return Object.keys(forecastData).map((keyName, i) =>{
-      return (
+  if (forecastData){
+     return Object.keys(forecastData).map((keyName, i) =>{
+       return (
               <WeatherDataPrediction 
-  
                   from = {forecastData[keyName].from}
                   to = {forecastData[keyName].to}
                   type = {forecastData[keyName].type}
@@ -66,7 +65,6 @@ renderWeatherPredictions(){
       )
   })
   }
-  
 }
 
 renderMinimumTemperatureData(){
@@ -74,8 +72,7 @@ renderMinimumTemperatureData(){
 
   return (
     <div>
-      <WeatherData
-            
+      <WeatherData   
              type = {mimumimTemperatureData.type}
              value = {mimumimTemperatureData.value}
              unit = {mimumimTemperatureData.unit}
@@ -118,15 +115,8 @@ renderDataForEachType(){
         />
       )
     }
-  })
-
-
-  
+  }) 
 }
-  
-
 }
 
 export default WeatherDataContainer;
-
-

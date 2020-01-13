@@ -1,28 +1,24 @@
-import { getData, weatherDataUrl, weatherForecastUrl } from '../util/ServerCommunicator';
+import { getData, weatherDataUrl, weatherForecastUrl } from "../util/ServerCommunicator";
 
-export const CREATE_DATA = 'CREATE_DATA'
-export const REFRESH_DATA = 'REFRESH_DATA'
-export const SELECT_CITY = 'SELECT_CITY'
-export const SELECT_START_DATE = 'SELECT_START_DATE'
-export const SELECT_END_DATE = 'SELECT_END_DATE'
-export const FETCH_WEATHER_DATA = 'FETCH_WEATHER_DATA'
-export const FETCH_FORECAST_DATA = 'FETCH_FORECAST_DATA'
-export const ERROR = 'ERROR'
+export const CREATE_DATA = "CREATE_DATA"
+export const REFRESH_DATA = "REFRESH_DATA"
+export const SELECT_CITY = "SELECT_CITY"
+export const SELECT_START_DATE = "SELECT_START_DATE"
+export const SELECT_END_DATE = "SELECT_END_DATE"
+export const FETCH_WEATHER_DATA = "FETCH_WEATHER_DATA"
+export const FETCH_FORECAST_DATA = "FETCH_FORECAST_DATA"
+export const ERROR = "ERROR"
 
-export function createData(newWeatherReport,selectedCity) {
-
+export function createData(newWeatherReport, selectedCity) {
   let reqBody = JSON.stringify(newWeatherReport);
-
   const headers = { "Content-Type": "application/json", Accept: "application/json" }
-
   fetch("http://localhost:8080/data/", {
-      method:'POST',
-      mode: 'cors',
-      credentials: 'same-origin',
+      method:"POST",
+      mode: "cors",
+      credentials: "same-origin",
       headers: headers,
-          body: reqBody
-          })
-
+      body: reqBody
+  })
   return fetchWeatherData(selectedCity);
 }
 
@@ -38,7 +34,7 @@ export function selectCity(city) {
     return getData(dataUrl)
         .then(response => response.json())
         .then(json => dispatch({ type: SELECT_CITY, city, weatherData: json }))
-        .catch(err => console.log("ERROR: " + err))
+        .catch(err => console.error("ERROR: " + err))
   }
 }
 
@@ -53,11 +49,11 @@ export function selectEndDate(endDate) {
 export const fetchWeatherData = (selectedCity = "Horsens") => {
   let dataUrl = weatherDataUrl + selectedCity
   
-  console.log("Fetching data...");
+  console.log("Fetching weather data");
 
   return (dispatch) => getData(dataUrl)
                       .then(res => res.json())
-                      .then( json => dispatch({ type: FETCH_WEATHER_DATA, weatherData: json })) 
+                      .then(json => dispatch({ type: FETCH_WEATHER_DATA, weatherData: json })) 
 }
 
 export const fetchForecastData = (selectedCity = "Horsens") => {

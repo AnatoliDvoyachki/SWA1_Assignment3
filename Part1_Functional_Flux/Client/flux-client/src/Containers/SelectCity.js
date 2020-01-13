@@ -1,12 +1,12 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { selectCity } from '../State/actions'
+import React from "react"
+import { connect } from "react-redux"
+import { selectCity } from "../State/actions"
 
 const mapStateToProps = state => {
     return {
       selectedCity: state.selectedCity
     }
-  }
+}
 
 let SelectCity = ({ selectedCity,dispatch }) => {
     return (

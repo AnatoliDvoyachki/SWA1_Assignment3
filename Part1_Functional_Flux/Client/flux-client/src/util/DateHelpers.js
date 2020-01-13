@@ -7,4 +7,4 @@ const getDate5DaysAgo = () =>  {
 
 const getCurrentDate = () => new Date()
 
-export{getDate5DaysAgo,getCurrentDate}
+export { getDate5DaysAgo, getCurrentDate }

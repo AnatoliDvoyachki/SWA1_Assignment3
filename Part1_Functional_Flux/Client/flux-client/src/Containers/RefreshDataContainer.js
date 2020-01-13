@@ -5,11 +5,12 @@ import { fetchForecastData, fetchWeatherData } from "../State/actions"
 let RefreshDataContainer = ({ selectedCity, dispatch }) => {
     return (
     <div>
-     <button onClick={e => handleClick(selectedCity, dispatch)}>Reload data</button>
+      <button onClick={e => handleClick(selectedCity, dispatch)}>Reload data</button>
     </div>
   )
 }
-const handleClick = (selectedCity,dispatch) => {
+
+const handleClick = (selectedCity, dispatch) => {
   console.log("Refreshing data...")
   dispatch(fetchForecastData(selectedCity))
   dispatch(fetchWeatherData(selectedCity))

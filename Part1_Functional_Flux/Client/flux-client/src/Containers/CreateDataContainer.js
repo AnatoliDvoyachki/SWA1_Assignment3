@@ -12,22 +12,15 @@ let CreateData = ({ selectedCity,dispatch }) => {
 }
 
 const onCreateReportClicked = (selectedCity, dispatch) => {
-  var type = prompt("Please enter weather data type");
-  var time = prompt("Please enter weather data time");
-  var place = prompt("Please enter weather data place");
-  var value = prompt("Please enter weather data value");
-  var unit = prompt("Please enter weather data unit");
+  let type = prompt("Please enter weather data type");
+  let time = prompt("Please enter weather data time");
+  let place = prompt("Please enter weather data place");
+  let value = prompt("Please enter weather data value");
+  let unit = prompt("Please enter weather data unit");
   
-  let newWeatherReport = 
-  [{
-      type,
-      time,
-      place,
-      value,
-      unit
-  }]
+  let newWeatherReport = [{ type, time, place, value, unit }]
 
-  dispatch(createData(newWeatherReport,selectedCity));
+  dispatch(createData(newWeatherReport, selectedCity));
 }
 
 const mapStateToProps = state => {
@@ -38,4 +31,3 @@ const mapStateToProps = state => {
 
 CreateData = connect(mapStateToProps)(CreateData)
 export default CreateData
-

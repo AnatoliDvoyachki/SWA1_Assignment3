@@ -1,96 +1,92 @@
 import model from "./model.js"
 
-const module = angular.module("weatherDataApp", []) //Referenced in html
+const module = angular.module("weatherDataApp", [])
 
 const headers = { "Content-Type": "application/json", Accept: "application/json" }
 
-module.value("$model", { cityNames: ["Aarhus", "Horsens", "Copenhagen"] }) //$model binds cityNames to the model
+module.value("$model", {  })
 
-//Dependancy injection
 module.controller("WeatherDataController", ($scope, $model, $http) => {      
-    
-    // scope is the ViewModel. Connects JavaScript to HTML
-    // http - dependency injection of http client. allows for http requests
-    
     // Initialize application
     $scope.model = $model
     let aModel
-    loadData(aModel, $scope, $http)
+    loadWeatherData(aModel, $scope, $http)
 
     // On city selection changed event handler
-    $scope.onCitySelectionChanged = () => loadData(aModel, $scope, $http)
+    $scope.onCitySelectionChanged = () => loadWeatherData(aModel, $scope, $http)
     
     // On reload data button click event handler
-    $scope.onReloadDataClicked = () => {
-        loadData(aModel, $scope, $http)
+    $scope.onReloadWeatherDataClicked = () => {
+        loadWeatherData(aModel, $scope, $http)
         console.log("reloaded") // To verify reload works
     }
 
     // On date picker value changed event handler
-    $scope.onDateChanged = () => loadData(aModel, $scope, $http)
+    $scope.onDateChanged = () => loadWeatherData(aModel, $scope, $http)
     
     // On create report click event handler
     $scope.onCreateReportClicked = () => {
-        let type = prompt("Please enter weather data type");
-        let time = prompt("Please enter weather data time");
-        let place = prompt("Please enter weather data place");
-        let value = prompt("Please enter weather data value");
-        let unit = prompt("Please enter weather data unit");
+        const type = prompt("Please enter weather data type")
+        const time = prompt("Please enter weather data time")
+        const place = prompt("Please enter weather data place")
+        const value = prompt("Please enter weather data value")
+        const unit = prompt("Please enter weather data unit")
         
-        let newWeatherReport = [{ type, time, place, value, unit }]
+        const newWeatherReport = [{ type, time, place, value, unit }]
     
         $http.post("http://localhost:8080/data/", newWeatherReport, { headers })
-            .then(() => loadData(aModel, $scope, $http))
-            .catch(error => console.error(error)) // Refresh data bindings after new weather data is added
+             .then(() => loadWeatherData(aModel, $scope, $http))
+             .catch(error => console.error(error)) // Refresh data bindings after new weather data is added
     }
 })
 
-const loadData = (aModel, $scope, $http) => {
+const loadWeatherData = (aModel, $scope, $http) => {
+    const urls = buildWeatherDataApiUrls($scope)
+    
+    const fromDate = $scope.fromDate != null 
+                        ? new Date($scope.fromDate) 
+                        : getDate5DaysAgo() // Default date is 5 days ago - similar to assignment 2
+    
+    const toDate = $scope.toDate != null 
+                    ? new Date($scope.toDate)
+                    : new Date() // Default date is now
+
+    $http.get(urls.weatherDataUrl)
+        .then(({ data: weatherData }) => {
+        $http.get(urls.weatherForecastUrl)
+            .then(({ data: weatherForecastData }) => {
+                aModel = model(weatherData, weatherForecastData, fromDate, toDate)
+                
+                $scope.model.latestDataOfEachType = aModel.getLatestDataOfEachType()
+                $scope.model.minimumTemperatureData = aModel.getMinTemperature()
+                $scope.model.maximumTemperatureData = aModel.getMaxTemperature()
+                $scope.model.totalPrecipitation = aModel.getTotalPrecipitation()
+                $scope.model.averageWindSpeed = aModel.getAverageWindSpeed()
+                $scope.model.averageCloudCoverage = aModel.getAverageCloudCoverage()
+                $scope.model.dominantWindDirection = aModel.getDominantWindDirection() 
+                $scope.model.weatherPredictions = aModel.getWeatherForecastData()
+        })
+    })
+    .catch(error => console.error(error))
+}
+
+const buildWeatherDataApiUrls = $scope => {
     let weatherDataUrl = "http://localhost:8080/data/"
     let weatherForecastUrl = "http://localhost:8080/forecast/"
 
     const cityName = $scope.cityName != null
                         ? $scope.cityName
                         : "" // Default empty to get all city data
-
-    const fromDate = $scope.fromDate != null 
-                        ? new Date($scope.fromDate) 
-                        : getDate5DaysAgo() // Default date (5 days ago, similar to assignment 2)
-    
-    const toDate = $scope.toDate != null 
-                    ? new Date($scope.toDate)
-                    : getCurrentDate() // Default date is now
-
+                        
     weatherDataUrl += cityName
     weatherForecastUrl += cityName
-    
-    $http.get(weatherDataUrl)
-        .then(({ data: weatherData }) => {
-        $http.get(weatherForecastUrl)
-            .then(({ data: weatherForecastData }) => {
-                aModel = model(weatherData, weatherForecastData)
-                
-                $scope.model.latestDataOfEachType = aModel.getLatestDataOfEachType(fromDate, toDate)
-                $scope.model.minimumTemperatureData = aModel.getMinTemperature(fromDate, toDate)
-                $scope.model.maximumTemperatureData = aModel.getMaxTemperature(fromDate, toDate)
-                $scope.model.totalPrecipitation = aModel.getTotalPrecipitation(fromDate, toDate)
-                $scope.model.averageWindSpeed = aModel.getAverageWindSpeed(fromDate, toDate)
-                $scope.model.averageCloudCoverage = aModel.getAverageCloudCoverage(fromDate, toDate)
-                $scope.model.dominantWindDirection = aModel.getDominantWindDirection(fromDate, toDate) 
-                $scope.model.weatherPredictions = aModel.getWeatherForecastData(fromDate, toDate)
-        })
-        .catch(error => console.error(error))
-    })
-    .catch(error => console.error(error))
+
+    return { weatherDataUrl, weatherForecastUrl }
 }
 
 const getDate5DaysAgo = () => {
-    let dateOffset = (24 * 60 * 60 * 1000) * 5; // 5 days
-    let myDate = new Date();
+    const dateOffset = (24 * 60 * 60 * 1000) * 5; // 5 days
+    const myDate = new Date();
     myDate.setTime(myDate.getTime() - dateOffset);
     return myDate
-}
-
-const getCurrentDate = () => {
-    return new Date()
 }
