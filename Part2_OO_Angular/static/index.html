@@ -53,48 +53,48 @@
 
     <div id="min_temperature_div">
         <h1>Minimum temperature recorded within the selected date interval:</h1>
-            <table id="min_temperature_table">
-                <thead>
-                    <tr>
-                        <td><b>Type</b></td>
-                        <td><b>Value</b></td>
-                        <td><b>Unit</b></td>
-                        <td><b>Time</b></td>
-                        <td><b>Place</b></td>
-                    </tr>
-                    <tr ng-repeat="weatherData in model.minimumTemperatureData">
-                        <td>{{weatherData.type}}</td>
-                        <td>{{weatherData.value}}</td>
-                        <td>{{weatherData.unit}}</td>
-                        <td>{{weatherData.time}}</td>
-                        <td>{{weatherData.place}}</td>
-                    </tr>
-                </thead>
-                <tbody id="min_temperature_data"></tbody>
-            </table>
+        <table id="min_temperature_table">
+            <thead>
+                <tr>
+                    <td><b>Type</b></td>
+                    <td><b>Value</b></td>
+                    <td><b>Unit</b></td>
+                    <td><b>Time</b></td>
+                    <td><b>Place</b></td>
+                </tr>
+                <tr ng-repeat="weatherData in model.minimumTemperatureData">
+                    <td>{{weatherData.type}}</td>
+                    <td>{{weatherData.value}}</td>
+                    <td>{{weatherData.unit}}</td>
+                    <td>{{weatherData.time}}</td>
+                    <td>{{weatherData.place}}</td>
+                </tr>
+            </thead>
+            <tbody id="min_temperature_data"></tbody>
+        </table>
    </div>    
 
    <div id="max_temperature_div">
-            <h1>Maximum temperature recorded within the selected date interval:</h1>
-            <table id="max_temperature_table">
-                <thead>
-                    <tr>
-                        <td><b>Type</b></td>
-                        <td><b>Value</b></td>
-                        <td><b>Unit</b></td>
-                        <td><b>Time</b></td>
-                        <td><b>Place</b></td>
-                    </tr>
-                    <tr ng-repeat="weatherData in model.maximumTemperatureData">
-                        <td>{{weatherData.type}}</td>
-                        <td>{{weatherData.value}}</td>
-                        <td>{{weatherData.unit}}</td>
-                        <td>{{weatherData.time}}</td>
-                        <td>{{weatherData.place}}</td>
-                    </tr>
-                </thead>
-                <tbody id="max_temperature_data"></tbody>
-            </table>
+        <h1>Maximum temperature recorded within the selected date interval:</h1>
+        <table id="max_temperature_table">
+            <thead>
+                <tr>
+                    <td><b>Type</b></td>
+                    <td><b>Value</b></td>
+                    <td><b>Unit</b></td>
+                    <td><b>Time</b></td>
+                    <td><b>Place</b></td>
+                </tr>
+                <tr ng-repeat="weatherData in model.maximumTemperatureData">
+                    <td>{{weatherData.type}}</td>
+                    <td>{{weatherData.value}}</td>
+                    <td>{{weatherData.unit}}</td>
+                    <td>{{weatherData.time}}</td>
+                    <td>{{weatherData.place}}</td>
+                </tr>
+            </thead>
+            <tbody id="max_temperature_data"></tbody>
+        </table>
     </div>    
 
     <div id = "base">
